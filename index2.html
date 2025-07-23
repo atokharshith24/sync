@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kota Sales Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for the waveform animation */
+        @keyframes wave-out {
+            0% { transform: scale(0.5); opacity: 1; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+        @keyframes wave-in {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        .animate-wave-out {
+            animation: wave-out 2s infinite ease-out;
+        }
+        .animate-wave-in {
+            animation: wave-in 2s infinite ease-out 0.5s; /* Staggered start */
+        }
+
+        /* General font application */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Hide scrollbar for chat messages but allow scrolling */
+        .chat-messages::-webkit-scrollbar {
+            display: none;
+        }
+        .chat-messages {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        /* Theme Toggle Switch Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #4A5568; /* Gray-700 for dark mode slider track */
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white; /* Knob color */
+            transition: .4s;
+            border-radius: 50%;
+            /* Sun icon for dark theme (black stroke on white knob) */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='4'%3E%3C/circle%3E%3Cpath d='M12 2v2'%3E%3C/path%3E%3Cpath d='M12 20v2'%3E%3C/path%3E%3Cpath d='M4.93 4.93l1.41 1.41'%3E%3C/path%3E%3Cpath d='M17.66 17.66l1.41 1.41'%3E%3C/path%3E%3Cpath d='M2 12h2'%3E%3C/path%3E%3Cpath d='M20 12h2'%3E%3C/path%3E%3Cpath d='M4.93 19.07l1.41-1.41'%3E%3C/path%3E%3Cpath d='M17.66 6.34l1.41-1.41'%3E%3C/path%3E%3C/svg%3E");
+            background-size: 80%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        input:checked + .slider {
+            background-color: #8B5CF6; /* Purple-500 for light mode slider track */
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+            /* Moon icon for light theme (black stroke on white knob) */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        /* Specific theme adjustments for light mode */
+        body.light-theme {
+            background-color: #F3F4F6; /* Gray-100 */
+            color: #1F2937; /* Gray-900 */
+        }
+
+        .light-theme .app-container {
+            background-color: #FFFFFF; /* White */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Soft shadow for light theme */
+        }
+
+        .light-theme .header-bg {
+            background-color: #FFFFFF; /* White */
+            border-bottom-color: #D1D5DB; /* Gray-300 */
+        }
+
+        .light-theme .card-bg-primary {
+            background-color: #FFFFFF; /* White */
+        }
+
+        .light-theme .card-bg-secondary {
+            background-color: #E5E7EB; /* Gray-200 */
+        }
+
+        .light-theme .card-bg-tertiary {
+            background-color: #F3F4F6; /* Gray-100 */
+        }
+
+        .light-theme .text-primary {
+            color: #1F2937; /* Gray-900 */
+        }
+
+        .light-theme .text-secondary {
+            color: #4B5563; /* Gray-600 */
+        }
+
+        .light-theme .text-tertiary {
+            color: #6B7280; /* Gray-500 */
+        }
+
+        .light-theme .text-accent-purple {
+            color: #6D28D9; /* Purple-700 */
+        }
+
+        .light-theme .text-accent-yellow {
+            color: #B45309; /* Yellow-700 */
+        }
+
+        .light-theme .border-default {
+            border-color: #D1D5DB; /* Gray-300 */
+        }
+
+        .light-theme .input-field {
+            background-color: #E5E7EB; /* Gray-200 */
+            color: #1F2937; /* Gray-900 */
+        }
+
+        .light-theme .chat-bubble-bot {
+            background-color: #E5E7EB; /* Gray-200 */
+            color: #1F2937; /* Gray-900 */
+        }
+
+        .light-theme .chat-bubble-user {
+            background-color: #8B5CF6; /* Purple-500 */
+            color: #FFFFFF; /* White */
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-950 flex items-center justify-center p-4 font-sans transition-colors duration-300">
+    <div class="relative w-full max-w-sm h-[800px] bg-neutral-900 rounded-3xl shadow-lg overflow-hidden flex flex-col app-container transition-colors duration-300">
+
+        <div id="welcome-screen" class="screen flex flex-col items-start justify-between h-full p-6 pt-4">
+            <div class="absolute top-4 right-6">
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle-welcome">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="w-full mt-8">
+                <h1 class="text-3xl font-bold text-white text-primary text-left">Welcome Kota!</h1>
+                <h2 class="text-2xl font-semibold text-purple-400 mt-1 text-accent-purple text-left flex items-center"> Meet Resonant
+                    <img src="output-onlinegiftools.gif" style="width: 2.75rem; height: 2.75rem;"
+                        alt="Resonant Icon" class="ml-2 w-6 h-6 object-contain">
+                </h2>
+                <p class="text-gray-400 mt-2 text-sm leading-relaxed text-secondary text-left"> This bot is your Ai Sales Assistant - helping you stay on top of your daily and monthly goals.
+                </p>
+            </div>
+
+            <div class="w-full flex items-center justify-center my-8">
+                <img src="Marketing Team Doing Market Analysis.gif" alt="Main Image" class="w-full h-auto rounded-2xl ">
+            </div>
+
+            <button id="welcome-chat-now-btn"
+                class="w-full py-4 bg-gradient-to-r from-purple-600 to-purple-800 text-white text-lg font-semibold rounded-2xl shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 mb-8 self-center flex items-center justify-center space-x-2">
+                <span>Let's Chat Now</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            </button>
+        </div>
+
+        <div id="home-screen" class="screen hidden flex-col h-full p-6 text-white overflow-y-auto">
+            <div class="flex justify-between items-center mb-6 mt-4 header-bg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 text-secondary"><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>
+                <span class="text-sm text-primary"> </span>
+                <div class="flex items-center space-x-2">
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle-home">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center overflow-hidden card-bg-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 text-secondary"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                </div>
+            </div>
+
+            <h1 class="text-3xl font-bold mb-2 text-primary">Hi, Kota</h1>
+            <p class="text-gray-400 text-lg mb-6 text-secondary">How can I assist you today?</p>
+
+            <div class="grid grid-cols-2 gap-4 mb-8 h-40" style="margin-bottom: 3rem ;">
+                <div id="talk-with-echo-card"
+                    class="bg-purple-600 p-4 rounded-2xl flex flex-col justify-between items-start cursor-pointer hover:bg-purple-700 transition-colors row-span-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white mb-2 feather feather-message-square">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span class="text-lg font-semibold text-white">Chat<br>with Sync</span>
+                </div>
+
+                <div id="chat-with-echo-card"
+                    class="bg-yellow-500 p-4 rounded-2xl flex flex-col justify-between items-start cursor-pointer hover:bg-yellow-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-neutral-900 mb-2 feather feather-mic">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="22"></line>
+                    </svg>
+                    <span class="text-base font-semibold text-neutral-900">Talk with Sync</span>
+                </div>
+
+                <div
+                    class="bg-pink-300 p-4 rounded-2xl flex flex-col justify-between items-start cursor-pointer hover:bg-pink-400 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-neutral-900 mb-2 feather feather-file-text">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <line x1="10" y1="9" x2="10" y2="9"></line>
+                    </svg>
+                    <span class="text-base font-semibold text-neutral-900">Access Reports</span>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-primary">Quick Reports</h3>
+                <button class="text-purple-400 text-sm text-accent-purple">See all</button>
+            </div>
+            <div class="flex flex-wrap gap-3 mb-8">
+                <div class="flex flex-col items-center space-y-1">
+                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-white card-bg-tertiary text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    </div>
+                    <span class="text-xs text-gray-400 text-secondary">Daily Sales</span>
+                </div>
+                <div class="flex flex-col items-center space-y-1">
+                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-white card-bg-tertiary text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="10" y2="9"></line></svg>
+                    </div>
+                    <span class="text-xs text-gray-400 text-secondary">Visit Perf.</span>
+                </div>
+                <div class="flex flex-col items-center space-y-1">
+                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-white card-bg-tertiary text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6"></path><path d="M6 20v-2"></path><path d="M18 20v-4"></path><path d="M12 14a4 4 0 0 1 0-8V2"></path><path d="M6 18a4 4 0 0 1 0-8V2"></path><path d="M18 16a4 4 0 0 1 0-8V2"></path></svg>
+                    </div>
+                    <span class="text-xs text-gray-400 text-secondary">CSR Perf.</span>
+                </div>
+                <div class="flex flex-col items-center space-y-1">
+                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-white card-bg-tertiary text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <span class="text-xs text-gray-400 text-secondary">Critical</span>
+                </div>
+                <div class="flex flex-col items-center space-y-1">
+                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-white card-bg-tertiary text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m4.93 4.93 14.14 14.14"></path></svg>
+                    </div>
+                    <span class="text-xs text-gray-400 text-secondary">Zero Sales</span>
+                </div>
+
+            </div>
+
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-primary">Recent Interactions</h3>
+                <button class="text-purple-400 text-sm text-accent-purple">See all</button>
+            </div>
+            <div class="flex flex-col space-y-3 pb-4">
+                <div class="bg-neutral-800 p-4 rounded-xl flex items-center space-x-3 card-bg-tertiary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 text-secondary"><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 15.73 8.54L22 22"></path><path d="M21 21v-5h-5"></path><path d="M21 12a9 9 0 0 0-15.73-8.54L2 2"></path></svg>
+                    <p class="text-gray-300 text-sm text-tertiary">What is my sales plan achievement?</p>
+                </div>
+                <div class="bg-neutral-800 p-4 rounded-xl flex items-center space-x-3 card-bg-tertiary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 text-secondary"><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 15.73 8.54L22 22"></path><path d="M21 21v-5h-5"></path><path d="M21 12a9 9 0 0 0-15.73-8.54L2 2"></path></svg>
+                    <p class="text-gray-300 text-sm text-tertiary">Show me critical outlets to visit.</p>
+                </div>
+                <div class="bg-neutral-800 p-4 rounded-xl flex items-center space-x-3 card-bg-tertiary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 text-secondary"><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 15.73 8.54L22 22"></path><path d="M21 21v-5h-5"></path><path d="M21 12a9 9 0 0 0-15.73-8.54L2 2"></path></svg>
+                    <p class="text-gray-300 text-sm text-tertiary">Who are the top 3 CSR employees?</p>
+                </div>
+                <div class="bg-neutral-800 p-4 rounded-xl flex items-center space-x-3 card-bg-tertiary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 text-secondary"><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 15.73 8.54L22 22"></path><path d="M21 21v-5h-5"></path><path d="M21 12a9 9 0 0 0-15.73-8.54L2 2"></path></svg>
+                    <p class="text-gray-300 text-sm text-tertiary">What is my visit adherence?</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="chat-screen" class="screen hidden flex-col h-full text-white">
+            <div class="flex items-center p-6 bg-neutral-900 border-b border-neutral-800 mt-4 header-bg border-default">
+                <svg id="chat-back-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 text-secondary cursor-pointer"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <h2 class="text-xl font-semibold ml-4 flex-grow text-center text-primary">Talking to Kota</h2>
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle-chat">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div id="chat-messages" class="flex-grow p-4 overflow-y-auto chat-messages">
+                </div>
+
+            <div class="flex justify-around p-2 bg-neutral-900 border-t border-neutral-800 header-bg border-default">
+                <button id="sales-insights-btn"
+                    class="bg-purple-600 text-white text-sm font-semibold py-2 px-4 rounded-full shadow-md hover:bg-purple-700 transition-colors flex items-center space-x-1">
+                    <span>Sales Insights ✨</span>
+                </button>
+                <button id="visit-plan-btn"
+                    class="bg-blue-600 text-white text-sm font-semibold py-2 px-4 rounded-full shadow-md hover:bg-blue-700 transition-colors flex items-center space-x-1">
+                    <span>Visit Plan ✨</span>
+                </button>
+            </div>
+
+            <div class="flex items-center p-4 bg-neutral-900 border-t border-neutral-800 rounded-b-3xl header-bg border-default">
+                <input type="text" id="chat-input" placeholder="Type your message..."
+                    class="flex-grow bg-neutral-800 text-white p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 mr-2 input-field">
+                <button id="send-message-btn"
+                    class="bg-purple-600 p-3 rounded-full flex items-center justify-center shadow-lg hover:bg-purple-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Get references to screen elements
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const homeScreen = document.getElementById('home-screen');
+        const chatScreen = document.getElementById('chat-screen');
+
+        // Get references to buttons
+        const welcomeChatNowBtn = document.getElementById('welcome-chat-now-btn');
+        const talkWithEchoCard = document.getElementById('talk-with-echo-card');
+        const chatWithEchoCard = document.getElementById('chat-with-echo-card');
+        const chatBackBtn = document.getElementById('chat-back-btn');
+
+        // Chat specific elements
+        const chatMessagesDiv = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendMessageBtn = document.getElementById('send-message-btn');
+        // Removed direct reference to loadingIndicator as it will be dynamic
+        // const loadingIndicator = document.getElementById('loading-indicator');
+
+        // Theme toggle elements
+        const themeToggleWelcome = document.getElementById('theme-toggle-welcome'); // New toggler for welcome screen
+        const themeToggleHome = document.getElementById('theme-toggle-home');
+        const themeToggleChat = document.getElementById('theme-toggle-chat');
+        const body = document.body;
+
+        // New LLM feature buttons
+        const salesInsightsBtn = document.getElementById('sales-insights-btn');
+        const visitPlanBtn = document.getElementById('visit-plan-btn');
+
+        // Chat history for the LLM
+        let chatHistory = [];
+
+        // Registration State
+        let registrationState = 'none'; // 'none', 'awaiting_emp_id', 'awaiting_default_pass', 'awaiting_new_pass', 'awaiting_confirm_pass'
+        let registrationData = {}; // To store temporary registration inputs
+
+        // === Theme Management ===
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                body.classList.add('light-theme');
+                // Update all toggle checkboxes
+                if (themeToggleWelcome) themeToggleWelcome.checked = true;
+                if (themeToggleHome) themeToggleHome.checked = true;
+                if (themeToggleChat) themeToggleChat.checked = true;
+            } else {
+                body.classList.remove('light-theme');
+                // Update all toggle checkboxes
+                if (themeToggleWelcome) themeToggleWelcome.checked = false;
+                if (themeToggleHome) themeToggleHome.checked = false;
+                if (themeToggleChat) themeToggleChat.checked = false;
+            }
+            localStorage.setItem('theme', theme); // Save preference
+        }
+
+        function toggleTheme() {
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        // === Function to show a specific screen and hide others ===
+        function showScreen(screenToShow) {
+            welcomeScreen.classList.add('hidden');
+            homeScreen.classList.add('hidden');
+            chatScreen.classList.add('hidden');
+
+            welcomeScreen.classList.remove('flex');
+            homeScreen.classList.remove('flex');
+            chatScreen.classList.remove('flex');
+
+            screenToShow.classList.remove('hidden');
+            screenToShow.classList.add('flex');
+
+            // If navigating to chat screen, scroll to bottom
+            if (screenToShow === chatScreen) {
+                chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+                // Add initial greeting if first time entering chat
+                if (chatHistory.length === 0) {
+                    addMessage("Welcome Kota! This bot is your Personal Sales Assistant - helping you stay on top of your daily and monthly goals. Please access Key Menu for more Information by typing /user", 'bot');
+                }
+            }
+        }
+
+        // === Function to add a message to the chat display ===
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('flex', 'mb-4');
+
+            const messageBubble = document.createElement('div');
+            messageBubble.classList.add('p-3', 'rounded-xl', 'max-w-[80%]');
+
+            if (sender === 'user') {
+                messageDiv.classList.add('justify-end');
+                messageBubble.classList.add('bg-purple-600', 'text-white', 'chat-bubble-user');
+            } else {
+                // Determine background color based on theme for bot bubbles
+                const isLightTheme = body.classList.contains('light-theme');
+                messageBubble.classList.add('justify-start', isLightTheme ? 'bg-gray-200' : 'bg-neutral-700', isLightTheme ? 'text-gray-900' : 'text-white', 'chat-bubble-bot');
+            }
+
+            // Replace newlines with <br> for HTML display
+            messageBubble.innerHTML = text.replace(/\n/g, '<br>');
+            messageDiv.appendChild(messageBubble);
+            chatMessagesDiv.appendChild(messageDiv);
+
+            // Scroll to the bottom of the chat
+            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+        }
+
+
+        // Function to add a loading message bubble
+        function addLoadingMessage() {
+            const loadingMessageDiv = document.createElement('div');
+            loadingMessageDiv.classList.add('flex', 'mb-4', 'justify-start'); // Align left like bot messages
+            loadingMessageDiv.id = 'bot-loading-bubble'; // Unique ID to easily find it later
+
+            const messageBubble = document.createElement('div');
+            // Use same styling as bot messages, but with fixed content
+            messageBubble.classList.add('p-3', 'rounded-xl', 'flex', 'items-center', 'space-x-2');
+            // Apply theme-specific colors for the loading bubble
+            const isLightTheme = body.classList.contains('light-theme');
+            messageBubble.classList.add(isLightTheme ? 'bg-gray-200' : 'bg-neutral-700', isLightTheme ? 'text-gray-900' : 'text-white', 'chat-bubble-bot');
+
+
+            const gifImg = document.createElement('img');
+            gifImg.src = 'output-onlinegiftools.gif'; // Your GIF URL
+            
+            gifImg.classList.add('w-8', 'h-8', 'object-contain'); // Size for the GIF
+
+            const textSpan = document.createElement('span');
+            textSpan.classList.add('text-gray-400', 'text-sm', 'text-secondary'); // Use text-secondary for theme compatibility
+            textSpan.textContent = 'sync is typing...';
+
+            messageBubble.appendChild(gifImg);
+            messageBubble.appendChild(textSpan);
+            loadingMessageDiv.appendChild(messageBubble);
+            chatMessagesDiv.appendChild(loadingMessageDiv);
+
+            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight; // Scroll to show loading
+        }
+
+        // Function to remove the loading message bubble
+        function removeLoadingMessage() {
+            const loadingBubble = document.getElementById('bot-loading-bubble');
+            if (loadingBubble) {
+                loadingBubble.remove();
+            }
+        }
+
+        // === Function to send a message to the chatbot ===
+        async function sendMessage(overrideMessage = null) {
+            const userMessage = overrideMessage || chatInput.value.trim();
+            if (userMessage === '') return;
+
+            if (!overrideMessage) { // Only add to display if it's a user-typed message
+                addMessage(userMessage, 'user');
+                chatInput.value = ''; // Clear input
+            }
+
+            // Show loading animation immediately after user sends message
+            addLoadingMessage();
+
+            let botResponse = '';
+            let handledByLogic = false;
+
+            // --- Handle specific commands and registration flow ---
+            // Existing logic for hardcoded responses
+            if (registrationState !== 'none') {
+                if (registrationState === 'awaiting_emp_id') {
+                    registrationData.employeeId = userMessage;
+                    botResponse = "Enter the default registration password:";
+                    registrationState = 'awaiting_default_pass';
+                    handledByLogic = true;
+                } else if (registrationState === 'awaiting_default_pass') {
+                    registrationData.defaultPassword = userMessage;
+                    botResponse = "Set new password";
+                    registrationState = 'awaiting_new_pass';
+                    handledByLogic = true;
+                } else if (registrationState === 'awaiting_new_pass') {
+                    registrationData.newPassword = userMessage;
+                    botResponse = "Confirm your new password:";
+                    registrationState = 'awaiting_confirm_pass';
+                    handledByLogic = true;
+                } else if (registrationState === 'awaiting_confirm_pass') {
+                    if (userMessage === registrationData.newPassword) {
+                        botResponse = "Registration successful!";
+                        registrationState = 'none'; // Reset state
+                        registrationData = {}; // Clear data
+                    } else {
+                        botResponse = "Passwords do not match. Please try setting a new password again.";
+                        registrationState = 'awaiting_new_pass'; // Go back to setting new password
+                    }
+                    handledByLogic = true;
+                }
+            } else if (userMessage.toLowerCase() === 'register') {
+                   botResponse = "Please choose an option:\nRegister\nLogin\nEnter your Employee ID to register:";
+                   registrationState = 'awaiting_emp_id'; // Start registration flow
+                   handledByLogic = true;
+            } else if (userMessage.toLowerCase() === 'login') {
+                   botResponse = "Please enter your Employee ID and password to login (e.g., IFBAPPL00499 Cloud#123):";
+                   handledByLogic = true;
+            } else if (userMessage.toLowerCase() === '/user') {
+                botResponse = "Please choose an option:\nRegister\nLogin";
+                handledByLogic = true;
+            } else if (userMessage.toLowerCase() === '/profile') {
+                botResponse = `Your Profile
+1. Emp Name: K BALAMURUGAN
+2. Emp No: IFBAPPL00499
+3. User Group: Territory Incharge
+4. State: Tamil Nadu
+5. Reporting Name: Raghul Kumar`;
+                handledByLogic = true;
+            } else if (userMessage.toLowerCase() === '/menu') {
+                botResponse = `Please choose an option:
+Primary achievement YTD
+Primary achievement QTD
+Primary achievement MTD
+Secondary achievement YTD
+Secondary achievement QTD
+Secondary achievement MTD
+Critical Outlets to Visit
+CSR with Zero Sales
+List of Counters not visited
+Cancel`;
+                handledByLogic = true;
+            } else if (userMessage.toLowerCase() === '/help') {
+                botResponse = `This is the help section.
+If you'd like to share feedback type or press /feedback`;
+                handledByLogic = true;
+            } else if (userMessage.toLowerCase() === '/cancel') {
+                botResponse = "Operation cancelled.";
+                registrationState = 'none'; // Ensure registration flow is cancelled
+                handledByLogic = true;
+            } else if (userMessage.toLowerCase().includes('daily visit performance report')) {
+                   botResponse = `Daily Visit Performance Report
+1. Overall Outlet Count: 51
+2. Total Visits Completed: 37
+3. Visit Adherence: 95.0%
+4. Unplanned Visits: 4.0%
+5. Top 5 Critical Outlets:
+   a. Dealer Name : James & Co-salai street (1000221)
+     Target : 118.0 | Actual : 0.0
+   b. Dealer Name : Vasanth & Co-PALANI ROAD,DINDIGUL (7012168)
+     Target : 28.0 | Actual : 0.0
+   c. Dealer Name : James Retail Private Limited-near junction (7006234)
+     Target : 23.0 | Actual : 0.0
+   d. Dealer Name : Sree Meenakshi Fan House P Ltd-opp abirami theatre (7007846)
+     Target : 21.0 | Actual : 0.0
+   e. Dealer Name : James & Co-near junction (7005165)
+     Target : 17.0 | Actual : 0.0
+Click to view detailed report`;
+                   handledByLogic = true;
+            } else if (userMessage.toLowerCase().includes('daily sales performance report')) {
+                   botResponse = `Daily Sales Performance Report
+1. Sales Plan Achievement: 47.0%
+   Target : 584.0  /  Actual : 277.0
+2. Outlets Planned vs Billed: 43 vs 28
+3. Category wise Target vs Actual:
+   a. AC: 4.0/7.0
+   b. CD: 0.0/1.0
+   c. DW: 13.0/2.0
+   d. FL: 212.0/67.0
+   e. KA: 1.0/0.0
+   f. MW: 68.0/30.0
+   g. REF-DC: 95.0/15.0
+   h. REF-FF: 9.0/4.0
+   i. TL: 182.0/151.0
+   j. WD: 0.0/0.0
+4. Bottom 3 Dealers:
+   a. Dealer Name : James Retail Private Limited (7006234)
+     Target : 19.0 | Actual : 0.0
+   b. Dealer Name : Sathya Agencies Pvt Ltd (7014998)
+     Target : 13.0 | Actual : 0.0
+   c. Dealer Name : Sathya Agencies Pvt Ltd (7019903)
+     Target : 12.0 | Actual : 0.0
+Click to view detailed report`;
+                   handledByLogic = true;
+            } else if (userMessage.toLowerCase().includes('daily csr performance report')) {
+                   botResponse = `Daily CSR Performance Report
+1. CSR with Zero sales: 2
+2. CR with Zero sales: 0
+3. Top 3 employees:
+   a. Dealer Name : VENKATESH PRASATH (IFBAPPL10678)
+     Target : 20.0 | Actual: 18.0
+   b. Dealer Name : ARAVINTH (IFBAPPL11951)
+     Target : 12.0 | Actual: 8.0
+   c. Dealer Name : SATHIS KUMAR J (IFBGCL640592)
+     Target : 18.0 | Actual: 12.0
+4. Bottom 3 employees:
+   a. Name : M.SURYA PRAKASH (IFBAPPL12170)
+     Target : 16.0 | Actual: 1.0
+   b. Name : PRAKASH RAJENDRAN (IFBGCL554289)
+     Target : 13.0 | Actual: 1.0
+   c. Name : SELVAMANI (IFBGCL638068)
+     Target : 13.0 | Actual: 2.0
+Click to view detailed report`;
+                   handledByLogic = true;
+            }
+
+            if (handledByLogic) {
+                // For hardcoded responses, add a small delay to make the loading visible
+                setTimeout(() => {
+                    removeLoadingMessage(); // Remove the loading animation
+                    addMessage(botResponse, 'bot'); // Add the actual response
+                }, 500); // 500ms delay
+                return; // Exit the function
+            }
+
+            // --- If not handled by direct logic, proceed with LLM ---
+            chatHistory.push({ role: "user", parts: [{ text: userMessage }] });
+
+            try {
+                const context = `
+You are Kota, a Personal Sales Assistant. Your main goal is to help the user stay on top of their daily and monthly goals by providing relevant information and reports based on the data provided below.
+
+---
+**User Profile Information:**
+Emp Name: K BALAMURUGAN
+Emp No: IFBAPPL00499
+User Group: Territory Incharge
+State: Tamil Nadu
+Reporting Name: Raghul Kumar
+---
+**Daily Visit Performance Report (Latest Data):**
+1. Overall Outlet Count: 51
+2. Total Visits Completed: 37
+3. Visit Adherence: 95.0%
+4. Unplanned Visits: 4.0%
+5. Top 5 Critical Outlets:
+   a. Dealer Name : James & Co-salai street (1000221) - Target: 118.0 | Actual: 0.0
+   b. Dealer Name : Vasanth & Co-PALANI ROAD,DINDIGUL (7012168) - Target: 28.0 | Actual: 0.0
+   c. Dealer Name : James Retail Private Limited-near junction (7006234) - Target: 23.0 | Actual: 0.0
+   d. Dealer Name : Sree Meenakshi Fan House P Ltd-opp abirami theatre (7007846) - Target: 21.0 | Actual: 0.0
+   e. Dealer Name : James & Co-near junction (7005165) - Target: 17.0 | Actual: 0.0
+---
+**Daily Sales Performance Report (Latest Data):**
+1. Sales Plan Achievement: 47.0%
+   Target : 584.0 / Actual : 277.0
+2. Outlets Planned vs Billed: 43 vs 28
+3. Category wise Target vs Actual:
+   a. AC: 4.0/7.0
+   b. CD: 0.0/1.0
+   c. DW: 13.0/2.0
+   d. FL: 212.0/67.0
+   e. KA: 1.0/0.0
+   f. MW: 68.0/30.0
+   g. REF-DC: 95.0/15.0
+   h. REF-FF: 9.0/4.0
+   i. TL: 182.0/151.0
+   j. WD: 0.0/0.0
+4. Bottom 3 Dealers:
+   a. Dealer Name : James Retail Private Limited (7006234)
+     Target : 19.0 | Actual : 0.0
+   b. Dealer Name : Sathya Agencies Pvt Ltd (7014998)
+     Target : 13.0 | Actual : 0.0
+   c. Dealer Name : Sathya Agencies Pvt Ltd (7019903)
+     Target : 12.0 | Actual : 0.0
+---
+**Daily CSR Performance Report (Latest Data):**
+1. CSR with Zero sales: 2
+2. CR with Zero sales: 0
+3. Top 3 employees:
+   a. Dealer Name : VENKATESH PRASATH (IFBAPPL10678) - Target: 20.0 | Actual: 18.0
+   b. Dealer Name : ARAVINTH (IFBAPPL11951) - Target: 12.0 | Actual: 8.0
+   c. Dealer Name : SATHIS KUMAR J (IFBGCL640592) - Target: 18.0 | Actual: 12.0
+4. Bottom 3 employees:
+   a. Name : M.SURYA PRAKASH (IFBAPPL12170)
+     Target : 16.0 | Actual: 1.0
+   b. Name : PRAKASH RAJENDRAN (IFBGCL554289)
+     Target : 13.0 | Actual: 1.0
+   c. Name : SELVAMANI (IFBGCL638068)
+     Target : 13.0 | Actual: 2.0
+---
+Please answer questions based *only* on the provided information. If the information is not available, state that you cannot provide it.
+`;
+
+                const salesInsightsPrompt = `
+Based on the "Daily Sales Performance Report (Latest Data)" provided in the context, give me a concise summary of the key sales achievements and highlight any categories or dealers that need immediate attention or improvement. Focus on actionable insights.
+`;
+
+                const visitPlanPrompt = `
+Based on the "Daily Visit Performance Report (Latest Data)" provided in the context, suggest a prioritized list of critical outlets to visit. Explain briefly why each is critical based on their target vs actual.
+`;
+
+                let promptToSend = userMessage; // Default to user's message
+
+                if (userMessage.toLowerCase() === 'sales insights') {
+                    promptToSend = salesInsightsPrompt;
+                } else if (userMessage.toLowerCase() === 'visit plan') {
+                    promptToSend = visitPlanPrompt;
+                }
+
+                const payload = {
+                    contents: [...chatHistory, { role: "user", parts: [{ text: promptToSend }] }], // Send the full history including current user message
+                    systemInstruction: { parts: [{ text: context }] }
+                };
+
+                const apiKey = ""; // Canvas will automatically provide the API key at runtime
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                // After receiving API response, remove loading animation
+                removeLoadingMessage();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const botResponse = result.candidates[0].content.parts[0].text;
+                    addMessage(botResponse, 'bot');
+                    chatHistory.push({ role: "model", parts: [{ text: botResponse }] });
+                } else {
+                    addMessage("Sorry, I couldn't get a response. Please try again.", 'bot');
+                    console.error("Unexpected API response structure:", result);
+                }
+            } catch (error) {
+                removeLoadingMessage(); // Remove loading on error too
+                addMessage("An error occurred while fetching the response. Please try again.", 'bot');
+                console.error("Error calling Gemini API:", error);
+            }
+        }
+
+        // === Event Listeners ===
+        welcomeChatNowBtn.addEventListener('click', () => {
+            showScreen(homeScreen);
+        });
+
+        talkWithEchoCard.addEventListener('click', () => {
+            showScreen(chatScreen);
+        });
+
+        chatWithEchoCard.addEventListener('click', () => {
+            showScreen(chatScreen);
+        });
+
+        chatBackBtn.addEventListener('click', () => {
+            showScreen(homeScreen);
+        });
+
+        sendMessageBtn.addEventListener('click', () => sendMessage()); // Call without override
+
+        chatInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage(); // Call without override
+            }
+        });
+
+        // New LLM feature button event listeners
+        salesInsightsBtn.addEventListener('click', () => {
+            addMessage("Sales Insights ✨", 'user'); // Add user's "click" message to chat
+            sendMessage('sales insights'); // Send specific command to LLM
+        });
+
+        visitPlanBtn.addEventListener('click', () => {
+            addMessage("Visit Plan ✨", 'user'); // Add user's "click" message to chat
+            sendMessage('visit plan'); // Send specific command to LLM
+        });
+
+        // Theme toggle event listeners
+        if (themeToggleWelcome) { // New listener for welcome screen toggler
+            themeToggleWelcome.addEventListener('change', toggleTheme);
+        }
+        if (themeToggleHome) {
+            themeToggleHome.addEventListener('change', toggleTheme);
+        }
+        if (themeToggleChat) {
+            themeToggleChat.addEventListener('change', toggleTheme);
+        }
+
+        // Initialize by showing the welcome screen and applying saved theme
+        document.addEventListener('DOMContentLoaded', () => {
+            showScreen(welcomeScreen);
+            const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+            applyTheme(savedTheme);
+        });
+    </script>
+</body>
+</html>
