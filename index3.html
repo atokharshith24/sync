@@ -389,7 +389,7 @@
         .light-theme .home-notification-text {
             color: #6B7280; /* Gray-500 */
         }
-         .home-notification-time {
+        .home-notification-time {
             font-size: 0.625rem; /* text-xs */
             color: #737373; /* Gray-500 */
             text-align: right;
@@ -398,6 +398,181 @@
         }
         .light-theme .home-notification-time {
             color: #9CA3AF; /* Gray-400 */
+        }
+
+        /* --- Custom Styles for Disabled Cards --- */
+        .card-disabled {
+            pointer-events: none; /* Disables click events */
+        }
+
+        /* Ensure font colors are consistent within disabled cards */
+        .card-disabled p {
+            color: #A3A3A3; /* Uniform faded text color for dark mode */
+        }
+
+        .card-disabled svg {
+            color: #8C8C8C; /* Uniform faded icon color for dark mode */
+        }
+
+        body.light-theme .card-disabled p {
+            color: #6B7280; /* Uniform faded text color for light mode */
+        }
+
+        body.light-theme .card-disabled svg {
+            color: #9CA3AF; /* Uniform faded icon color for light theme */
+        }
+
+        /* --- Collapsible Section Styles --- */
+        .collapsible-header {
+            display: flex;
+            align-items: center; /* Align items vertically in the center */
+            justify-content: space-between; /* Space out title/arrow and "See all" button */
+            margin-bottom: 1rem;
+            cursor: pointer; /* Indicate it's clickable */
+            width: 100%; /* Take full width of its parent */
+        }
+
+        .collapsible-header .title-group {
+            display: flex;
+            align-items: center; /* Align the h3 and arrow horizontally */
+            flex-grow: 1; /* Allow this group to take up available space */
+        }
+
+        .collapsible-header h3 {
+            margin-bottom: 0; /* Remove default margin from h3 */
+            margin-right: 0.5rem; /* Space between title and arrow */
+        }
+
+        .collapsible-header button {
+            flex-shrink: 0; /* Prevent "See all" button from shrinking */
+        }
+
+        .collapsible-arrow {
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #EF4444; /* Red-500 */
+            transition: transform 0.3s ease-in-out;
+            flex-shrink: 0; /* Prevent arrow from shrinking */
+        }
+
+        .collapsible-arrow.rotate-180 {
+            transform: rotate(180deg);
+        }
+
+        body.light-theme .collapsible-arrow {
+            border-top-color: #DC2626; /* Red-600 for light theme */
+        }
+
+        .section-content.hidden {
+            display: none;
+        }
+
+        /* --- Daily Sales Report Screen Styles --- */
+        #daily-sales-report-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #171717; /* Matches app-container dark theme */
+            transform: translateY(100%); /* Start off-screen at the bottom */
+            transition: transform 0.4s ease-out; /* Smooth slide-up animation */
+            z-index: 2000; /* Above other elements like sidebar */
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            color: white; /* Default text color */
+            overflow-y: auto; /* Allow scrolling for content */
+        }
+
+        #daily-sales-report-screen.is-active {
+            transform: translateY(0%); /* Slide into view */
+        }
+
+        body.light-theme #daily-sales-report-screen {
+            background-color: #F3F4F6; /* Light Gray-100 */
+            color: #1F2937; /* Gray-900 */
+        }
+
+        /* Specific styles for the report content within the report screen */
+        .report-content-card {
+            background-color: #262626; /* Neutral-800 for content background */
+            padding: 1.25rem; /* p-5 */
+            border-radius: 0.75rem; /* rounded-xl */
+            margin-top: 1rem; /* Space from header */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            color: #E5E7EB; /* Default text for report content */
+        }
+
+        body.light-theme .report-content-card {
+            background-color: #E5E7EB; /* Gray-200 for light theme */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            color: #1F2937; /* Darker text for light theme */
+        }
+
+        .report-section-title {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600; /* semibold */
+            color: #EF4444; /* Red-500 */
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.25rem; /* Small space below title */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+        }
+
+        body.light-theme .report-section-title {
+            color: #DC2626; /* Red-600 */
+            border-bottom-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .report-item {
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.25rem;
+            color: #CBD5E0; /* Gray-300 for general text */
+        }
+
+        body.light-theme .report-item {
+            color: #4B5563; /* Gray-600 for general text */
+        }
+
+        .report-item strong {
+            color: #FFFFFF; /* White for strong text in dark mode */
+            font-weight: 700; /* Extra bold for numbers */
+        }
+        body.light-theme .report-item strong {
+            color: #1F2937; /* Gray-900 for strong text in light mode */
+        }
+
+        .report-sub-item {
+            margin-left: 1rem;
+            font-size: 0.8125rem; /* Slightly smaller than report-item */
+            color: #A3A3A3; /* Gray-400 */
+            line-height: 1.125rem;
+            display: block; /* Ensures it takes full line below main item */
+        }
+        body.light-theme .report-sub-item {
+            color: #6B7280; /* Gray-500 */
+        }
+
+        .report-list {
+            padding-left: 1rem; /* Indent for list items */
+            margin-bottom: 1rem;
+        }
+
+        .report-link {
+            display: block;
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #DC2626; /* Red-600 */
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            transition: color 0.2s ease-in-out;
+        }
+        .report-link:hover {
+            color: #EF4444; /* Red-500 */
         }
     </style>
 </head>
@@ -438,25 +613,18 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
                 </button>
 
-                
+               
             </div>
         </div>
 
         <div id="home-screen" class="screen hidden flex-col h-full p-6 text-white overflow-y-auto relative">
             <div class="flex justify-between items-center mb-6 mt-4 header-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 text-secondary"><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>
-                <span class="text-sm text-primary"> </span>
-                <div class="flex items-center space-x-2">
-                    <label class="switch">
-                        <input type="checkbox" id="theme-toggle-home">
-                        <span class="slider"></span>
-                    </label>
-                    
-                </div>
+                <h1 class="text-2xl font-bold text-primary" style="color: #B91C1C;">Hi, Kota 
+                    </h1>
+                <button id="open-sidebar-btn" class="text-gray-400 text-secondary cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
             </div>
-
-            <h1 class="text-3xl font-bold mb-2 text-primary" style="color: #B91C1C;">Hi, Kota</h1>
-            <p class="text-gray-400 text-lg mb-6 text-secondary">How can I assist you today?</p>
 
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-semibold text-primary">Quick Reports</h3>
@@ -464,7 +632,7 @@
             </div>
             <div class="flex flex-wrap gap-3 mb-8">
                 <div class="flex flex-col items-center space-y-1">
-                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-primary card-bg-tertiary quick-report-icon-bg">
+                    <div id="daily-sales-icon" class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-primary card-bg-tertiary quick-report-icon-bg cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                     </div>
                     <span class="text-xs text-secondary">Daily Sales</span>
@@ -495,18 +663,24 @@
                 </div>
             </div>
 
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-primary">Recent Insights</h3>
+            <div id="recent-insights-header" class="collapsible-header">
+                <div class="title-group">
+                    <h3 class="text-xl font-semibold text-primary">Recent Insights</h3>
+                    <div class="collapsible-arrow"></div>
+                </div>
                 <button id="notification-card-see-all" class="text-red-600 text-sm text-accent-red">See all</button>
             </div>
-            <div id="recent-notifications-container" class="space-y-3 mb-8">
-                </div>
+            <div id="recent-notifications-container" class="space-y-3 mb-8 section-content">
+            </div>
 
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-primary">Queries to Know</h3>
+            <div id="queries-to-know-header" class="collapsible-header">
+                <div class="title-group">
+                    <h3 class="text-xl font-semibold text-primary">Queries to Know</h3>
+                    <div class="collapsible-arrow"></div>
+                </div>
                 <button class="text-red-600 text-sm text-accent-red">See all</button>
             </div>
-            <div class="flex flex-col space-y-3 pb-4">
+            <div id="queries-to-know-container" class="flex flex-col space-y-3 pb-4 section-content">
                 <div id="talk-with-echo-card" class="bg-neutral-800 p-4 rounded-xl flex items-center space-x-3 card-bg-tertiary cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="color: #B91C1C;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
                     <p class="text-tertiary text-sm">What is my sales plan achievement?</p>
@@ -529,39 +703,52 @@
                 <img src="sync.gif" alt="Animated GIF for Home Screen">
             </div>
 
+        </div>
+
+        <div id="daily-sales-report-screen" class="screen hidden">
+            <div class="flex justify-between items-center mb-6">
+                <button id="daily-sales-back-btn" class="text-gray-400 text-lg flex items-center hover:text-white transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-middle mr-1"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <span class="align-middle text-secondary">Back</span>
+                </button>
+                <h2 class="text-xl font-bold text-primary" style="color: #B91C1C;">Daily Sales Report</h2>
             </div>
 
-        <div id="chat-screen" class="screen hidden flex-col h-full text-white">
-            <div class="flex items-center p-6 bg-neutral-900 border-b border-neutral-800 mt-4 header-bg border-default">
-                <svg id="chat-back-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 text-secondary cursor-pointer"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                <h2 class="text-xl font-semibold ml-4 flex-grow text-center text-primary">Talking to Kota</h2>
-                <label class="switch">
-                    <input type="checkbox" id="theme-toggle-chat">
-                    <span class="slider"></span>
-                </label>
-            </div>
+            <div class="report-content-card flex-grow overflow-y-auto">
+                <h3 class="report-section-title">1. Sales Plan Achievement:</h3>
+                <p class="report-item ml-2">Target: <strong class="font-bold">584.0</strong> / Actual: <strong class="font-bold">163.0</strong></p>
+                <p class="report-item">2. Outlets Planned vs Billed: <strong class="font-bold">43 vs 25</strong></p>
 
-            <div id="chat-messages" class="flex-grow p-4 overflow-y-auto chat-messages">
-                </div>
+                <h3 class="report-section-title mt-6">3. Category wise Target vs Actual:</h3>
+                <ul class="report-list">
+                    <li class="report-item">AC: <strong class="font-bold">4.0/5.0</strong></li>
+                    <li class="report-item">CD: <strong class="font-bold">0.0/1.0</strong></li>
+                    <li class="report-item">DW: <strong class="font-bold">13.0/2.0</strong></li>
+                    <li class="report-item">FL: <strong class="font-bold">212.0/57.0</strong></li>
+                    <li class="report-item">KA: <strong class="font-bold">1.0/0.0</strong></li>
+                    <li class="report-item">MW: <strong class="font-bold">68.0/17.0</strong></li>
+                    <li class="report-item">REF-DC: <strong class="font-bold">95.0/4.0</strong></li>
+                    <li class="report-item">REF-FF: <strong class="font-bold">9.0/1.0</strong></li>
+                    <li class="report-item">TL: <strong class="font-bold">182.0/76.0</strong></li>
+                    <li class="report-item">WD: <strong class="font-bold">0.0/0.0</strong></li>
+                </ul>
 
-            <div class="flex justify-around p-2 bg-neutral-900 border-t border-neutral-800 header-bg border-default">
-                <button id="sales-insights-btn"
-                    class="bg-red-600 text-white text-sm font-semibold py-2 px-4 rounded-full shadow-md hover:bg-red-700 transition-colors flex items-center space-x-1">
-                    <span>Sales Insights ✨</span>
-                </button>
-                <button id="visit-plan-btn"
-                    class="bg-gray-600 text-white text-sm font-semibold py-2 px-4 rounded-full shadow-md hover:bg-gray-700 transition-colors flex items-center space-x-1">
-                    <span>Visit Plan ✨</span>
-                </button>
-            </div>
-
-            <div class="flex items-center p-4 bg-neutral-900 border-t border-neutral-800 rounded-b-3xl header-bg border-default">
-                <input type="text" id="chat-input" placeholder="Type your message..."
-                    class="flex-grow bg-neutral-800 text-white p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600 mr-2 input-field">
-                <button id="send-message-btn"
-                    class="bg-red-600 p-3 rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                </button>
+                <h3 class="report-section-title mt-6">4. Bottom 3 Dealers:</h3>
+                <ul class="report-list">
+                    <li class="report-item">
+                        <span class="font-semibold">a. Dealer Name :</span> James Retail Private Limited (1017685)<br>
+                        <span class="report-sub-item">Target: <strong class="font-bold">74.0</strong> | Actual: <strong class="font-bold">0.0</strong></span>
+                    </li>
+                    <li class="report-item">
+                        <span class="font-semibold">b. Dealer Name :</span> DARLING JAMES ELECTRONICS (1032298)<br>
+                        <span class="report-sub-item">Target: <strong class="font-bold">67.0</strong> | Actual: <strong class="font-bold">0.0</strong></span>
+                    </li>
+                    <li class="report-item">
+                        <span class="font-semibold">c. Dealer Name :</span> James Retail Private Limited (7006234)<br>
+                        <span class="report-sub-item">Target: <strong class="font-bold">19.0</strong> | Actual: <strong class="font-bold">0.0</strong></span>
+                    </li>
+                </ul>
+                <a href="#" class="report-link">Click to view detailed report</a>
             </div>
         </div>
 
@@ -589,18 +776,13 @@
                 </div>
             </div>
         </div>
-        </div>
+    </div>
 
     <script>
-        // Placeholder Base64 for a small, simple loading GIF (REPLACE THIS WITH YOUR ACTUAL GIF'S BASE64)
-        const MAIN_LOADING_GIF_BASE64 = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='; 
-        const TYPING_TEXT_GIF_BASE64 = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='; 
-
-
         // Get references to screen elements
         const welcomeScreen = document.getElementById('welcome-screen');
         const homeScreen = document.getElementById('home-screen');
-        const chatScreen = document.getElementById('chat-screen');
+        const dailySalesReportScreen = document.getElementById('daily-sales-report-screen');
 
         // Get references to buttons/cards
         const loginBtn = document.getElementById('login-btn'); 
@@ -608,48 +790,38 @@
         const employeeIdInput = document.getElementById('employee-id-input'); 
         const passwordInput = document.getElementById('password-input'); 
 
+        const dailySalesIcon = document.getElementById('daily-sales-icon'); // The clickable icon for Daily Sales
+        const dailySalesBackBtn = document.getElementById('daily-sales-back-btn'); // Back button on daily sales report
+
         const talkWithEchoCard = document.getElementById('talk-with-echo-card');
         const chatWithEchoCard = document.getElementById('chat-with-echo-card'); 
-        const chatBackBtn = document.getElementById('chat-back-btn');
-
-        // Chat specific elements (only for chat-screen)
-        const chatMessagesDiv = document.getElementById('chat-messages');
-        const chatInput = document.getElementById('chat-input');
-        const sendMessageBtn = document.getElementById('send-message-btn');
-
 
         // Theme toggle elements
         const themeToggleWelcome = document.getElementById('theme-toggle-welcome');
-        const themeToggleHome = document.getElementById('theme-toggle-home');
-        const themeToggleChat = document.getElementById('theme-toggle-chat');
         const body = document.body;
 
-        // New LLM feature buttons
-        const salesInsightsBtn = document.getElementById('sales-insights-btn');
-        const visitPlanBtn = document.getElementById('visit-plan-btn');
-
         // Get references for notification sidebar elements
-        const recentNotificationsContainer = document.getElementById('recent-notifications-container'); // New: Container for home screen notifications
+        const recentNotificationsContainer = document.getElementById('recent-notifications-container');
         const notificationCardSeeAll = document.getElementById('notification-card-see-all'); 
         const notificationSidebar = document.getElementById('notification-sidebar');
         const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+        const openSidebarBtn = document.getElementById('open-sidebar-btn');
+
+        // Collapsible elements
+        const recentInsightsHeader = document.getElementById('recent-insights-header');
+        const queriesToKnowHeader = document.getElementById('queries-to-know-header');
+        const queriesToKnowContainer = document.getElementById('queries-to-know-container');
 
         // === Theme Management ===
         function applyTheme(theme) {
             if (theme === 'light') {
                 body.classList.add('light-theme');
-                // Update all toggle checkboxes
                 if (themeToggleWelcome) themeToggleWelcome.checked = true;
-                if (themeToggleHome) themeToggleHome.checked = true;
-                if (themeToggleChat) themeToggleChat.checked = true;
             } else {
                 body.classList.remove('light-theme');
-                // Update all toggle checkboxes
                 if (themeToggleWelcome) themeToggleWelcome.checked = false;
-                if (themeToggleHome) themeToggleHome.checked = false;
-                if (themeToggleChat) themeToggleChat.checked = false;
             }
-            localStorage.setItem('theme', theme); // Save preference
+            localStorage.setItem('theme', theme);
         }
 
         function toggleTheme() {
@@ -660,395 +832,43 @@
 
         // === Function to show a specific screen and hide others ===
         function showScreen(screenToShow) {
-            welcomeScreen.classList.add('hidden');
-            homeScreen.classList.add('hidden');
-            chatScreen.classList.add('hidden');
+            // Hide all screens
+            const allScreens = [welcomeScreen, homeScreen, dailySalesReportScreen];
+            allScreens.forEach(screen => {
+                screen.classList.add('hidden');
+                screen.classList.remove('flex');
+                screen.classList.remove('is-active'); // Remove active class for animation control
+            });
 
-            welcomeScreen.classList.remove('flex');
-            homeScreen.classList.remove('flex');
-            chatScreen.classList.remove('flex');
-
+            // Show the requested screen
             screenToShow.classList.remove('hidden');
             screenToShow.classList.add('flex');
 
-            // If navigating to chat screen, scroll to bottom
-            if (screenToShow === chatScreen) {
-                chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
-                // Add initial greeting if first time entering chat
-                if (chatHistory.length === 0) {
-                    addMessage("Welcome Kota! This bot is your Personal Sales Assistant - helping you stay on top of your daily and monthly goals. Please access Key Menu for more Information by typing /user", 'bot');
-                }
-            }
-        }
-
-        // === Function to add a message to the chat display ===
-        function addMessage(text, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('flex', 'mb-4');
-
-            const messageBubble = document.createElement('div');
-            messageBubble.classList.add('p-3', 'rounded-xl', 'max-w-[80%]');
-
-            if (sender === 'user') {
-                messageDiv.classList.add('justify-end');
-                messageBubble.classList.add('bg-red-600', 'text-white', 'chat-bubble-user');
-            } else {
-                // Determine background color based on theme for bot bubbles
-                const isLightTheme = body.classList.contains('light-theme');
-                messageBubble.classList.add('justify-start', isLightTheme ? 'bg-gray-200' : 'bg-neutral-700', isLightTheme ? 'text-gray-900' : 'text-white', 'chat-bubble-bot');
-            }
-
-            // Replace newlines with <br> for HTML display
-            messageBubble.innerHTML = text.replace(/\n/g, '<br>');
-            messageDiv.appendChild(messageBubble);
-            chatMessagesDiv.appendChild(messageDiv);
-
-            // Scroll to the bottom of the chat
-            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
-        }
-
-
-        // Function to add a loading message bubble with GIFs
-        function addLoadingMessage() {
-            const loadingMessageDiv = document.createElement('div');
-            loadingMessageDiv.classList.add('flex', 'mb-4', 'justify-start'); // Align left like bot messages
-            loadingMessageDiv.id = 'bot-loading-bubble'; // Unique ID to easily find it later
-
-            const messageBubble = document.createElement('div');
-            // Use same styling as bot messages, but with flex for internal elements
-            messageBubble.classList.add('p-3', 'rounded-xl', 'flex', 'items-center', 'space-x-2');
-            // Apply theme-specific colors for the loading bubble
-            const isLightTheme = body.classList.contains('light-theme');
-            messageBubble.classList.add(isLightTheme ? 'bg-gray-200' : 'bg-neutral-700', isLightTheme ? 'text-gray-900' : 'text-white', 'chat-bubble-bot');
-
-
-            // First GIF for the main loading animation
-            const gifImg1 = document.createElement('img');
-            gifImg1.src = MAIN_LOADING_GIF_BASE64;
-            gifImg1.alt = 'Loading animation';
-            gifImg1.classList.add('w-8', 'h-8', 'object-contain'); // Size for the GIF
-
-            // Second GIF to replace "Kota is typing..." text
-            const gifImg2 = document.createElement('img');
-            gifImg2.src = TYPING_TEXT_GIF_BASE64;
-            gifImg2.alt = 'Typing indicator';
-            gifImg2.classList.add('h-4', 'w-auto', 'object-contain'); // Example size: auto width, 16px height
-
-
-            messageBubble.appendChild(gifImg1);
-            messageBubble.appendChild(gifImg2); // Append the second GIF
-            loadingMessageDiv.appendChild(messageBubble);
-            chatMessagesDiv.appendChild(loadingMessageDiv);
-
-            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight; // Scroll to show loading
-        }
-
-        // Function to remove the loading message bubble
-        function removeLoadingMessage() {
-            const loadingBubble = document.getElementById('bot-loading-bubble');
-            if (loadingBubble) {
-                loadingBubble.remove();
-            }
-        }
-
-        // === Function to send a message to the chatbot ===
-        async function sendMessage(overrideMessage = null) {
-            const userMessage = overrideMessage || chatInput.value.trim();
-            if (userMessage === '') return;
-
-            if (!overrideMessage) { // Only add to display if it's a user-typed message
-                addMessage(userMessage, 'user');
-                chatInput.value = ''; // Clear input
-            }
-
-            // Show loading animation immediately after user sends message
-            addLoadingMessage();
-
-            let botResponse = '';
-            let handledByLogic = false;
-
-            // --- Handle specific commands and registration flow ---
-            if (registrationState !== 'none') {
-                if (registrationState === 'awaiting_emp_id') {
-                    registrationData.employeeId = userMessage;
-                    botResponse = "Enter the default registration password:";
-                    registrationState = 'awaiting_default_pass';
-                    handledByLogic = true;
-                } else if (registrationState === 'awaiting_default_pass') {
-                    registrationData.defaultPassword = userMessage;
-                    botResponse = "Set new password";
-                    registrationState = 'awaiting_new_pass';
-                    handledByLogic = true;
-                } else if (registrationState === 'awaiting_new_pass') {
-                    registrationData.newPassword = userMessage;
-                    botResponse = "Confirm your new password:";
-                    registrationState = 'awaiting_confirm_pass';
-                    handledByLogic = true;
-                } else if (registrationState === 'awaiting_confirm_pass') {
-                    if (userMessage === registrationData.newPassword) {
-                        botResponse = "Registration successful!";
-                        registrationState = 'none'; // Reset state
-                        registrationData = {}; // Clear data
-                    } else {
-                        botResponse = "Passwords do not match. Please try setting a new password again.";
-                        registrationState = 'awaiting_new_pass'; // Go back to setting new password
-                    }
-                    handledByLogic = true;
-                }
-            } else if (userMessage.toLowerCase() === 'register') {
-                    botResponse = "Please choose an option:\nRegister\nLogin\nEnter your Employee ID to register:";
-                    registrationState = 'awaiting_emp_id'; // Start registration flow
-                    handledByLogic = true;
-            } else if (userMessage.toLowerCase() === 'login') {
-                    botResponse = "Please enter your Employee ID and password to login (e.g., IFBAPPL00499 Cloud#123):";
-                    handledByLogic = true;
-            } else if (userMessage.toLowerCase() === '/user') {
-                botResponse = "Please choose an option:\nRegister\nLogin";
-                handledByLogic = true;
-            } else if (userMessage.toLowerCase() === '/profile') {
-                botResponse = `Your Profile
-1. Emp Name: K BALAMURUGAN
-2. Emp No: IFBAPPL00499
-3. User Group: Territory Incharge
-4. State: Tamil Nadu
-5. Reporting Name: Raghul Kumar`;
-                handledByLogic = true;
-            } else if (userMessage.toLowerCase() === '/menu') {
-                botResponse = `Please choose an option:
-Primary achievement YTD
-Primary achievement QTD
-Primary achievement MTD
-Secondary achievement YTD
-Secondary achievement QTD
-Secondary achievement MTD
-Critical Outlets to Visit
-CSR with Zero Sales
-List of Counters not visited
-Cancel`;
-                handledByLogic = true;
-            } else if (userMessage.toLowerCase() === '/help') {
-                botResponse = `This is the help section.
-If you'd like to share feedback type or press /feedback`;
-                handledByLogic = true;
-            } else if (userMessage.toLowerCase() === '/cancel') {
-                botResponse = "Operation cancelled.";
-                registrationState = 'none'; // Ensure registration flow is cancelled
-                handledByLogic = true;
-            } else if (userMessage.toLowerCase().includes('daily visit performance report')) {
-                    botResponse = `Daily Visit Performance Report
-1. Overall Outlet Count: 51
-2. Total Visits Completed: 37
-3. Visit Adherence: 95.0%
-4. Unplanned Visits: 4.0%
-5. Top 5 Critical Outlets:
-    a. Dealer Name : James & Co-salai street (1000221)
-      Target : 118.0 | Actual : 0.0
-    b. Dealer Name : Vasanth & Co-PALANI ROAD,DINDIGUL (7012168)
-      Target : 28.0 | Actual : 0.0
-    c. Dealer Name : James Retail Private Limited-near junction (7006234)
-      Target : 23.0 | Actual : 0.0
-    d. Dealer Name : Sree Meenakshi Fan House P Ltd-opp abirami theatre (7007846)
-      Target : 21.0 | Actual : 0.0
-    e. Dealer Name : James & Co-near junction (7005165)
-      Target : 17.0 | Actual : 0.0
-Click to view detailed report`;
-                    handledByLogic = true;
-            } else if (userMessage.toLowerCase().includes('daily sales performance report')) {
-                    botResponse = `Daily Sales Performance Report
-1. Sales Plan Achievement: 47.0%
-    Target : 584.0  /  Actual : 277.0
-2. Outlets Planned vs Billed: 43 vs 28
-3. Category wise Target vs Actual:
-    a. AC: 4.0/7.0
-    b. CD: 0.0/1.0
-    c. DW: 13.0/2.0
-    d. FL: 212.0/67.0
-    e. KA: 1.0/0.0
-    f. MW: 68.0/30.0
-    g. REF-DC: 95.0/15.0
-    h. REF-FF: 9.0/4.0
-    i. TL: 182.0/151.0
-    j. WD: 0.0/0.0
-4. Bottom 3 Dealers:
-    a. Dealer Name : James Retail Private Limited (7006234)
-      Target : 19.0 | Actual : 0.0
-    b. Dealer Name : Sathya Agencies Pvt Ltd (7014998)
-      Target : 13.0 | Actual : 0.0
-    c. Dealer Name : Sathya Agencies Pvt Ltd (7019903)
-      Target : 12.0 | Actual : 0.0
-Click to view detailed report`;
-                    handledByLogic = true;
-            } else if (userMessage.toLowerCase().includes('daily csr performance report')) {
-                    botResponse = `Daily CSR Performance Report
-1. CSR with Zero sales: 2
-2. CR with Zero sales: 0
-3. Top 3 employees:
-    a. Dealer Name : VENKATESH PRASATH (IFBAPPL10678) - Target: 20.0 | Actual: 18.0
-    b. Dealer Name : ARAVINTH (IFBAPPL11951) - Target: 12.0 | Actual: 8.0
-    c. Dealer Name : SATHIS KUMAR J (IFBGCL640592) - Target: 18.0 | Actual: 12.0
-4. Bottom 3 employees:
-    a. Name : M.SURYA PRAKASH (IFBAPPL12170)
-      Target : 16.0 | Actual: 1.0
-    b. Name : PRAKASH RAJENDRAN (IFBGCL554289)
-      Target : 13.0 | Actual: 1.0
-    c. Name : SELVAMANI (IFBGCL638068)
-      Target : 13.0 | Actual: 2.0
-Click to view detailed report`;
-                    handledByLogic = true;
-            }
-
-            if (handledByLogic) {
-                // For hardcoded responses, add a small delay to make the loading visible
+            // Add active class for animation if it's the daily sales screen
+            if (screenToShow === dailySalesReportScreen) {
+                // Use a short timeout to ensure the display property is set before transform starts
                 setTimeout(() => {
-                    removeLoadingMessage(); // Remove the loading animation
-                    addMessage(botResponse, 'bot'); // Add the actual response
-                }, 500); // 500ms delay
-                return; // Exit the function
-            }
-
-            // --- If not handled by direct logic, proceed with LLM ---
-            chatHistory.push({ role: "user", parts: [{ text: userMessage }] });
-
-            try {
-                const context = `
-You are Kota, a Personal Sales Assistant. Your main goal is to help the user stay on top of their daily and monthly goals by providing relevant information and reports based on the data provided below.
-
----
-**User Profile Information:**
-Emp Name: K BALAMURUGAN
-Emp No: IFBAPPL00499
-User Group: Territory Incharge
-State: Tamil Nadu
-Reporting Name: Raghul Kumar
----
-**Daily Visit Performance Report (Latest Data):**
-1. Overall Outlet Count: 51
-2. Total Visits Completed: 37
-3. Visit Adherence: 95.0%
-4. Unplanned Visits: 4.0%
-5. Top 5 Critical Outlets:
-    a. Dealer Name : James & Co-salai street (1000221) - Target: 118.0 | Actual: 0.0
-    b. Dealer Name : Vasanth & Co-PALANI ROAD,DINDIGUL (7012168) - Target: 28.0 | Actual: 0.0
-    c. Dealer Name : James Retail Private Limited-near junction (7006234) - Target: 23.0 | Actual: 0.0
-    d. Dealer Name : Sree Meenakshi Fan House P Ltd-opp abirami theatre (7007846) - Target: 21.0 | Actual: 0.0
-    e. Dealer Name : James & Co-near junction (7005165) - Target: 17.0 | Actual: 0.0
----
-**Daily Sales Performance Report (Latest Data):**
-1. Sales Plan Achievement: 47.0%
-    Target : 584.0 / Actual : 277.0
-2. Outlets Planned vs Billed: 43 vs 28
-3. Category wise Target vs Actual:
-    a. AC: 4.0/7.0
-    b. CD: 0.0/1.0
-    c. DW: 13.0/2.0
-    d. FL: 212.0/67.0
-    e. KA: 1.0/0.0
-    f. MW: 68.0/30.0
-    g. REF-DC: 95.0/15.0
-    h. REF-FF: 9.0/4.0
-    i. TL: 182.0/151.0
-    j. WD: 0.0/0.0
-4. Bottom 3 Dealers:
-    a. Dealer Name : James Retail Private Limited (7006234)
-      Target : 19.0 | Actual : 0.0
-    b. Dealer Name : Sathya Agencies Pvt Ltd (7014998)
-      Target : 13.0 | Actual : 0.0
-    c. Dealer Name : Sathya Agencies Pvt Ltd (7019903)
-      Target : 12.0 | Actual : 0.0
----
-**Daily CSR Performance Report (Latest Data):**
-1. CSR with Zero sales: 2
-2. CR with Zero sales: 0
-3. Top 3 employees:
-    a. Dealer Name : VENKATESH PRASATH (IFBAPPL10678) - Target: 20.0 | Actual: 18.0
-    b. Dealer Name : ARAVINTH (IFBAPPL11951) - Target: 12.0 | Actual: 8.0
-    c. Dealer Name : SATHIS KUMAR J (IFBGCL640592) - Target: 18.0 | Actual: 12.0
-4. Bottom 3 employees:
-    a. Name : M.SURYA PRAKASH (IFBAPPL12170)
-      Target : 16.0 | Actual: 1.0
-    b. Name : PRAKASH RAJENDRAN (IFBGCL554289)
-      Target : 13.0 | Actual: 1.0
-    c. Name : SELVAMANI (IFBGCL638068)
-      Target : 13.0 | Actual: 2.0
----
-Please answer questions based *only* on the provided information. If the information is not available, state that you cannot provide it.
-`;
-
-                const salesInsightsPrompt = `
-Based on the "Daily Sales Performance Report (Latest Data)" provided in the context, give me a concise summary of the key sales achievements and highlight any categories or dealers that need immediate attention or improvement. Focus on actionable insights.
-`;
-
-                const visitPlanPrompt = `
-Based on the "Daily Visit Performance Report (Latest Data)" provided in the context, suggest a prioritized list of critical outlets to visit. Explain briefly why each is critical based on their target vs actual.
-`;
-
-                let promptToSend = userMessage; // Default to user's message
-
-                if (userMessage.toLowerCase() === 'sales insights') {
-                    promptToSend = salesInsightsPrompt;
-                } else if (userMessage.toLowerCase() === 'visit plan') {
-                    promptToSend = visitPlanPrompt;
-                }
-
-                const payload = {
-                    contents: [...chatHistory, { role: "user", parts: [{ text: promptToSend }] }], // Send the full history including current user message
-                    systemInstruction: { parts: [{ text: context }] }
-                };
-
-                const apiKey = ""; // Canvas will automatically provide the API key at runtime
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const result = await response.json();
-
-                // After receiving API response, remove loading animation
-                removeLoadingMessage();
-
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    const botResponse = result.candidates[0].content.parts[0].text;
-                    addMessage(botResponse, 'bot');
-                    chatHistory.push({ role: "model", parts: [{ text: botResponse }] });
-                } else {
-                    addMessage("Sorry, I couldn't get a response. Please try again.", 'bot');
-                    console.error("Unexpected API response structure:", result);
-                }
-            } catch (error) {
-                removeLoadingMessage(); // Remove loading on error too
-                addMessage("An error occurred while fetching the response. Please try again.", 'bot');
-                console.error("Error calling Gemini API:", error);
+                    screenToShow.classList.add('is-active');
+                }, 10); 
             }
         }
 
-        // === Dummy Notification Data (replace with real data fetching) ===
-        // Current time for timestamps
-        const now = new Date();
-
+        // === Dummy Notification Data ===
         const dummyNotifications = [
             { title: "Daily Sales Report Ready!", text: "Your sales data for July 23rd, 2025 is available.", time: "2:05 PM" },
             { title: "New Visit Plan Alert", text: "5 critical outlets added to your visit plan for tomorrow.", time: "1:30 PM" },
             { title: "Performance Review Scheduled", text: "Your monthly performance review is set for July 28th.", time: "Yesterday" },
             { title: "System Update Complete", text: "Kota Sales Assistant has been updated with new features.", time: "July 22nd" },
-            { title: "New Leads Arrived!", text: "3 new potential customer leads have been added.", time: "10:00 AM" }
+            { title: "Team Meeting Reminder", text: "Don't forget the weekly sales sync at 9 AM tomorrow!", time: "4:00 PM" } 
         ];
 
         function renderRecentNotifications() {
-            if (!recentNotificationsContainer) return; // Exit if container doesn't exist
-
-            recentNotificationsContainer.innerHTML = ''; // Clear existing notifications
-
-            // Display only the latest 3 notifications
-            const notificationsToDisplay = dummyNotifications.slice(0, 3); 
-
-            notificationsToDisplay.forEach(notif => {
+            if (!recentNotificationsContainer) return;
+            recentNotificationsContainer.innerHTML = '';
+            
+            dummyNotifications.forEach(notif => { // Loop through all notifications
                 const notificationDiv = document.createElement('div');
-                notificationDiv.classList.add('home-notification-card'); // Use the new class
+                notificationDiv.classList.add('home-notification-card');
                 notificationDiv.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="home-notification-icon">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -1060,17 +880,16 @@ Based on the "Daily Visit Performance Report (Latest Data)" provided in the cont
                     <span class="home-notification-time text-tertiary">${notif.time}</span>
                 `;
                 recentNotificationsContainer.appendChild(notificationDiv);
-
-                // Add event listener to open sidebar when clicking this notification card
-                notificationDiv.addEventListener('click', () => {
-                    notificationSidebar.classList.add('is-open');
-                });
             });
         }
 
+        // === Collapsible Section Functions ===
+        function toggleSection(headerElement, contentElement, arrowElement) {
+            contentElement.classList.toggle('hidden');
+            arrowElement.classList.toggle('rotate-180');
+        }
 
         // === Event Listeners ===
-        // Event listeners for Login and Signup buttons
         if (loginBtn) {
             loginBtn.addEventListener('click', () => {
                 const employeeId = employeeIdInput.value.trim();
@@ -1079,7 +898,7 @@ Based on the "Daily Visit Performance Report (Latest Data)" provided in the cont
                 if (employeeId === "IFBAPPL00499" && password === "Cloud#123") {
                     alert("Login successful!");
                     showScreen(homeScreen);
-                    renderRecentNotifications(); // Render notifications after successful login
+                    renderRecentNotifications();
                 } else {
                     alert("Invalid Employee ID or Password. Please try again.");
                 }
@@ -1091,58 +910,31 @@ Based on the "Daily Visit Performance Report (Latest Data)" provided in the cont
                 alert("Please contact your administrator to sign up for a new account.");
             });
         }
-
-        // Event listeners for the cards on the home screen
+        
+        // Apply 'card-disabled' class to the "Queries to Know" cards
         if (talkWithEchoCard) { 
-            talkWithEchoCard.addEventListener('click', () => {
-                showScreen(chatScreen);
-            });
+            talkWithEchoCard.classList.add('card-disabled');
         }
-
         if (chatWithEchoCard) { 
-            chatWithEchoCard.addEventListener('click', () => {
-                showScreen(chatScreen);
-            });
+            chatWithEchoCard.classList.add('card-disabled');
         }
         
-        chatBackBtn.addEventListener('click', () => {
-            showScreen(homeScreen);
+        // Theme toggles are now global
+        document.querySelectorAll('.switch input[type="checkbox"]').forEach(toggle => {
+            toggle.addEventListener('change', toggleTheme);
         });
 
-        sendMessageBtn.addEventListener('click', () => sendMessage()); 
-
-        chatInput.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') {
-                sendMessage(); 
-            }
-        });
-
-        // New LLM feature button event listeners
-        salesInsightsBtn.addEventListener('click', () => {
-            addMessage("Sales Insights ✨", 'user'); 
-            sendMessage('sales insights'); 
-        });
-
-        visitPlanBtn.addEventListener('click', () => {
-            addMessage("Visit Plan ✨", 'user'); 
-            sendMessage('visit plan'); 
-        });
-
-        // Theme toggle event listeners
-        if (themeToggleWelcome) {
-            themeToggleWelcome.addEventListener('change', toggleTheme);
-        }
-        if (themeToggleHome) {
-            themeToggleHome.addEventListener('change', toggleTheme);
-        }
-        if (themeToggleChat) {
-            themeToggleChat.addEventListener('change', toggleTheme);
+        // Event listener for the new menu icon to open the sidebar
+        if (openSidebarBtn) {
+            openSidebarBtn.addEventListener('click', () => {
+                notificationSidebar.classList.add('is-open');
+            });
         }
 
-        // Event listeners for Notification Card/Sidebar
-        if (notificationCardSeeAll) { // Clicking 'See all' on the notification card also opens the sidebar
+        // The "See all" button for Recent Insights will now specifically open the sidebar
+        if (notificationCardSeeAll) { 
             notificationCardSeeAll.addEventListener('click', (event) => {
-                event.stopPropagation(); // Prevent issues if this button was inside another clickable area
+                event.stopPropagation();
                 notificationSidebar.classList.add('is-open'); 
             });
         }
@@ -1153,12 +945,66 @@ Based on the "Daily Visit Performance Report (Latest Data)" provided in the cont
             });
         }
 
-        // Initialize by showing the welcome screen and applying saved theme
+        // Event listener for "Daily Sales" icon to show report
+        if (dailySalesIcon) {
+            dailySalesIcon.addEventListener('click', () => {
+                showScreen(dailySalesReportScreen);
+            });
+        }
+
+        // Event listener for "Back" button on Daily Sales Report screen
+        if (dailySalesBackBtn) {
+            dailySalesBackBtn.addEventListener('click', () => {
+                dailySalesReportScreen.classList.remove('is-active');
+                setTimeout(() => {
+                    showScreen(homeScreen);
+                }, 400); // Matches the transition duration
+            });
+        }
+
+        // Event listeners for collapsible sections
+        if (recentInsightsHeader) {
+            const arrow = recentInsightsHeader.querySelector('.collapsible-arrow');
+            recentInsightsHeader.addEventListener('click', (event) => {
+                if (event.target.tagName === 'BUTTON' && event.target.classList.contains('text-accent-red')) {
+                    return; 
+                }
+                toggleSection(recentInsightsHeader, recentNotificationsContainer, arrow);
+            });
+        }
+
+        if (queriesToKnowHeader) {
+            const arrow = queriesToKnowHeader.querySelector('.collapsible-arrow');
+            queriesToKnowHeader.addEventListener('click', (event) => {
+                if (event.target.tagName === 'BUTTON' && event.target.classList.contains('text-accent-red')) {
+                    return;
+                }
+                toggleSection(queriesToKnowHeader, queriesToKnowContainer, arrow);
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             showScreen(welcomeScreen);
             const savedTheme = localStorage.getItem('theme') || 'dark'; 
             applyTheme(savedTheme);
-            // Notifications are rendered AFTER login, so no need to call here initially
+            
+            // Initialize collapsible arrows to point down (default open state)
+            if (recentInsightsHeader && recentNotificationsContainer) {
+                const arrow = recentInsightsHeader.querySelector('.collapsible-arrow');
+                if (!recentNotificationsContainer.classList.contains('hidden')) {
+                    arrow.classList.remove('rotate-180');
+                } else {
+                    arrow.classList.add('rotate-180'); 
+                }
+            }
+            if (queriesToKnowHeader && queriesToKnowContainer) {
+                const arrow = queriesToKnowHeader.querySelector('.collapsible-arrow');
+                if (!queriesToKnowContainer.classList.contains('hidden')) {
+                    arrow.classList.remove('rotate-180');
+                } else {
+                    arrow.classList.add('rotate-180'); 
+                }
+            }
         });
     </script>
 </body>
