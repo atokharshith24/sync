@@ -94,7 +94,7 @@
         }
 
         input:checked + .slider {
-            background-color: #8B5CF6; /* Purple-500 for light mode slider track */
+            background-color: #DC2626; /* Red-600 for light mode slider track */
         }
 
         input:checked + .slider:before {
@@ -133,6 +133,11 @@
         .light-theme .card-bg-tertiary {
             background-color: #F3F4F6; /* Gray-100 */
         }
+        /* For the circular quick report icons */
+        .light-theme .quick-report-icon-bg {
+            background-color: #FECACA; /* Red-200, a very light red */
+        }
+
 
         .light-theme .text-primary {
             color: #1F2937; /* Gray-900 */
@@ -146,12 +151,13 @@
             color: #6B7280; /* Gray-500 */
         }
 
-        .light-theme .text-accent-purple {
-            color: #6D28D9; /* Purple-700 */
+        /* Adjusted accent colors for red theme */
+        .light-theme .text-accent-red {
+            color: #B91C1C; /* Red-700 */
         }
 
         .light-theme .text-accent-yellow {
-            color: #B45309; /* Yellow-700 */
+            color: #B45309; /* Yellow-700 (kept as is, or can be changed to match new theme) */
         }
 
         .light-theme .border-default {
@@ -169,21 +175,12 @@
         }
 
         .light-theme .chat-bubble-user {
-            background-color: #8B5CF6; /* Purple-500 */
+            background-color: #DC2626; /* Red-600 */
             color: #FFFFFF; /* White */
         }
 
         /* Custom CSS for notification GIF positioning */
-        #home-screen {
-            position: relative; /* Make the home-screen div a positioning context for its children */
-        }
-
-        #notification-gif {
-            top: 100px; /* Distance from the top of the home-screen div */
-            right: 24px; /* Distance from the right of the home-screen div (p-6 means 24px padding) */
-            cursor: pointer; /* Indicate it's clickable */
-            z-index: 10; /* Ensure it's above other elements if needed */
-        }
+        /* Removed absolute positioning, as it will now be in flow */
 
         /* CSS for the scrolling notification */
         .notification-scroll-container {
@@ -340,6 +337,68 @@
         body.light-theme #notification-sidebar #close-sidebar-btn:hover {
             color: #1F2937;
         }
+
+        /* Home screen notification card */
+        .home-notification-card {
+            background-color: #262626; /* neutral-800, matching other cards */
+            padding: 1rem;
+            border-radius: 0.75rem; /* rounded-xl */
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            display: flex;
+            align-items: flex-start; /* Align icon and text to top */
+            gap: 0.75rem; /* space-x-3 */
+        }
+        .light-theme .home-notification-card {
+            background-color: #E5E7EB; /* Gray-200 for light theme */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .home-notification-card:hover {
+            background-color: #3f3f3f; /* Slightly lighter on hover in dark mode */
+        }
+        .light-theme .home-notification-card:hover {
+            background-color: #D1D5DB; /* Slightly darker on hover in light mode */
+        }
+        .home-notification-icon {
+            flex-shrink: 0;
+            color: #EF4444; /* Red-500 */
+        }
+        .light-theme .home-notification-icon {
+            color: #DC2626; /* Red-600 */
+        }
+        .home-notification-content {
+            flex-grow: 1;
+        }
+        .home-notification-title {
+            font-weight: 600; /* semibold */
+            color: #FFFFFF; /* White */
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.25rem; /* leading-5 */
+        }
+        .light-theme .home-notification-title {
+            color: #1F2937; /* Gray-900 */
+        }
+        .home-notification-text {
+            color: #A3A3A3; /* Gray-400 */
+            font-size: 0.75rem; /* text-xs */
+            line-height: 1rem; /* leading-4 */
+            margin-top: 0.25rem; /* mt-1 */
+        }
+        .light-theme .home-notification-text {
+            color: #6B7280; /* Gray-500 */
+        }
+         .home-notification-time {
+            font-size: 0.625rem; /* text-xs */
+            color: #737373; /* Gray-500 */
+            text-align: right;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+        .light-theme .home-notification-time {
+            color: #9CA3AF; /* Gray-400 */
+        }
     </style>
 </head>
 <body class="min-h-screen bg-neutral-950 flex items-center justify-center p-4 font-sans transition-colors duration-300">
@@ -355,7 +414,7 @@
 
             <div class="w-full mt-8">
                 <h1 class="text-3xl font-bold text-white text-primary text-left">Welcome to Kota!</h1>
-                <h2 class="text-2xl font-semibold text-purple-400 mt-1 text-accent-purple text-left flex items-center"> Meet Sync
+                <h2 class="text-2xl font-semibold text-red-500 mt-1 text-accent-red text-left flex items-center"> Meet Sync
                     <img src="sync.gif" style="width: 2.75rem; height: 2.75rem;"
                         alt="Sync Icon" class="ml-2 w-6 h-6 object-contain">
                 </h2>
@@ -369,12 +428,12 @@
 
             <div class="w-full space-y-4 mb-8">
                 <input type="text" id="employee-id-input" placeholder="Employee ID"
-                    class="w-full p-3 rounded-xl bg-neutral-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-600 input-field">
+                    class="w-full p-3 rounded-xl bg-neutral-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600 input-field">
                 <input type="password" id="password-input" placeholder="Password"
-                    class="w-full p-3 rounded-xl bg-neutral-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-600 input-field">
+                    class="w-full p-3 rounded-xl bg-neutral-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600 input-field">
                 
                 <button id="login-btn"
-                    class="w-full py-3 bg-gradient-to-r from-purple-600 to-purple-800 text-white text-lg font-semibold rounded-2xl shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2">
+                    class="w-full py-3 bg-gradient-to-r from-red-600 to-red-800 text-white text-lg font-semibold rounded-2xl shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2">
                     <span>Login</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
                 </button>
@@ -396,68 +455,72 @@
                 </div>
             </div>
 
-            <h1 class="text-3xl font-bold mb-2 text-primary">Hi, Kota</h1>
+            <h1 class="text-3xl font-bold mb-2 text-primary" style="color: #B91C1C;">Hi, Kota</h1>
             <p class="text-gray-400 text-lg mb-6 text-secondary">How can I assist you today?</p>
 
-            <img id="notification-gif" src="natification2.gif"
-                        alt="Notification Icon" class="absolute w-10 h-10 object-contain">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-semibold text-primary">Quick Reports</h3>
-                <button class="text-purple-400 text-sm text-accent-purple">See all</button>
+                <button class="text-red-600 text-sm text-accent-red">See all</button>
             </div>
             <div class="flex flex-wrap gap-3 mb-8">
                 <div class="flex flex-col items-center space-y-1">
-                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-primary card-bg-tertiary">
+                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-primary card-bg-tertiary quick-report-icon-bg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                     </div>
                     <span class="text-xs text-secondary">Daily Sales</span>
                 </div>
                 <div class="flex flex-col items-center space-y-1">
-                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-primary card-bg-tertiary">
+                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-primary card-bg-tertiary quick-report-icon-bg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="10" y2="9"></line></svg>
                     </div>
                     <span class="text-xs text-secondary">Visit Perf.</span>
                 </div>
                 <div class="flex flex-col items-center space-y-1">
-                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-primary card-bg-tertiary">
+                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center text-primary card-bg-tertiary quick-report-icon-bg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6"></path><path d="M6 20v-2"></path><path d="M18 20v-4"></path><path d="M12 14a4 4 0 0 1 0-8V2"></path><path d="M6 18a4 4 0 0 1 0-8V2"></path><path d="M18 16a4 4 0 0 1 0-8V2"></path></svg>
                     </div>
                     <span class="text-xs text-secondary">CSR Perf.</span>
                 </div>
                 <div class="flex flex-col items-center space-y-1">
-                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center card-bg-tertiary text-primary">
+                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center card-bg-tertiary text-primary quick-report-icon-bg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                     </div>
                     <span class="text-xs text-secondary">Critical</span>
                 </div>
                 <div class="flex flex-col items-center space-y-1">
-                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center card-bg-tertiary text-primary">
+                    <div class="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center card-bg-tertiary text-primary quick-report-icon-bg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
                     </div>
                     <span class="text-xs text-secondary">Zero Sales</span>
                 </div>
-
             </div>
 
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold text-primary">Sales Report Queries</h3>
-                <button class="text-purple-400 text-sm text-accent-purple">See all</button>
+                <h3 class="text-xl font-semibold text-primary">Recent Insights</h3>
+                <button id="notification-card-see-all" class="text-red-600 text-sm text-accent-red">See all</button>
+            </div>
+            <div id="recent-notifications-container" class="space-y-3 mb-8">
+                </div>
+
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-primary">Queries to Know</h3>
+                <button class="text-red-600 text-sm text-accent-red">See all</button>
             </div>
             <div class="flex flex-col space-y-3 pb-4">
                 <div id="talk-with-echo-card" class="bg-neutral-800 p-4 rounded-xl flex items-center space-x-3 card-bg-tertiary cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="color: #B91C1C;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
                     <p class="text-tertiary text-sm">What is my sales plan achievement?</p>
                 </div>
                 <div id="chat-with-echo-card" class="bg-neutral-800 p-4 rounded-xl flex items-center space-x-3 card-bg-tertiary cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle><line x1="12" y1="18" x2="12" y2="18"></line><line x1="12" y1="15" x2="12" y2="12"></line></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="color: #B91C1C;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle><line x1="12" y1="18" x2="12" y2="18"></line><line x1="12" y1="15" x2="12" y2="12"></line></svg>
                     <p class="text-tertiary text-sm">Show me critical outlets to visit.</p>
                 </div>
                 <div class="bg-neutral-800 p-4 rounded-xl flex items-center space-x-3 card-bg-tertiary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="color: #B91C1C;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
                     <p class="text-tertiary text-sm">Who are the top 3 CSR employees?</p>
                 </div>
                 <div class="bg-neutral-800 p-4 rounded-xl flex items-center space-x-3 card-bg-tertiary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2l4-4"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="color: #B91C1C;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2l4-4"></path></svg>
                     <p class="text-tertiary text-sm">What is my visit adherence?</p>
                 </div>
             </div>
@@ -483,20 +546,20 @@
 
             <div class="flex justify-around p-2 bg-neutral-900 border-t border-neutral-800 header-bg border-default">
                 <button id="sales-insights-btn"
-                    class="bg-purple-600 text-white text-sm font-semibold py-2 px-4 rounded-full shadow-md hover:bg-purple-700 transition-colors flex items-center space-x-1">
+                    class="bg-red-600 text-white text-sm font-semibold py-2 px-4 rounded-full shadow-md hover:bg-red-700 transition-colors flex items-center space-x-1">
                     <span>Sales Insights ✨</span>
                 </button>
                 <button id="visit-plan-btn"
-                    class="bg-blue-600 text-white text-sm font-semibold py-2 px-4 rounded-full shadow-md hover:bg-blue-700 transition-colors flex items-center space-x-1">
+                    class="bg-gray-600 text-white text-sm font-semibold py-2 px-4 rounded-full shadow-md hover:bg-gray-700 transition-colors flex items-center space-x-1">
                     <span>Visit Plan ✨</span>
                 </button>
             </div>
 
             <div class="flex items-center p-4 bg-neutral-900 border-t border-neutral-800 rounded-b-3xl header-bg border-default">
                 <input type="text" id="chat-input" placeholder="Type your message..."
-                    class="flex-grow bg-neutral-800 text-white p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 mr-2 input-field">
+                    class="flex-grow bg-neutral-800 text-white p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600 mr-2 input-field">
                 <button id="send-message-btn"
-                    class="bg-purple-600 p-3 rounded-full flex items-center justify-center shadow-lg hover:bg-purple-700 transition-colors">
+                    class="bg-red-600 p-3 rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </button>
             </div>
@@ -530,13 +593,8 @@
 
     <script>
         // Placeholder Base64 for a small, simple loading GIF (REPLACE THIS WITH YOUR ACTUAL GIF'S BASE64)
-        // You can use online tools (e.g., base64-image.de) to convert your GIF file to a Data URI.
-        // For a visible typing indicator, this string will be much longer.
-        const MAIN_LOADING_GIF_BASE64 = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='; // REPLACE THIS!
-
-        // Placeholder Base64 for a small GIF to replace "Kota is typing..." text (REPLACE THIS WITH YOUR ACTUAL GIF'S BASE64)
-        // This should be a very small, concise animation if it's replacing text directly.
-        const TYPING_TEXT_GIF_BASE64 = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='; // REPLACE THIS!
+        const MAIN_LOADING_GIF_BASE64 = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='; 
+        const TYPING_TEXT_GIF_BASE64 = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='; 
 
 
         // Get references to screen elements
@@ -545,10 +603,10 @@
         const chatScreen = document.getElementById('chat-screen');
 
         // Get references to buttons/cards
-        const loginBtn = document.getElementById('login-btn'); // New login button
-        const signupBtn = document.getElementById('signup-btn'); // New signup button
-        const employeeIdInput = document.getElementById('employee-id-input'); // New Employee ID input
-        const passwordInput = document.getElementById('password-input'); // New Password input
+        const loginBtn = document.getElementById('login-btn'); 
+        const signupBtn = document.getElementById('signup-btn'); 
+        const employeeIdInput = document.getElementById('employee-id-input'); 
+        const passwordInput = document.getElementById('password-input'); 
 
         const talkWithEchoCard = document.getElementById('talk-with-echo-card');
         const chatWithEchoCard = document.getElementById('chat-with-echo-card'); 
@@ -570,15 +628,9 @@
         const salesInsightsBtn = document.getElementById('sales-insights-btn');
         const visitPlanBtn = document.getElementById('visit-plan-btn');
 
-        // Chat history for the LLM
-        let chatHistory = [];
-
-        // Registration State
-        let registrationState = 'none'; // 'none', 'awaiting_emp_id', 'awaiting_default_pass', 'awaiting_new_pass', 'awaiting_confirm_pass'
-        let registrationData = {}; // To store temporary registration inputs
-
-        // NEW: Get references for notification sidebar elements
-        const notificationGif = document.getElementById('notification-gif');
+        // Get references for notification sidebar elements
+        const recentNotificationsContainer = document.getElementById('recent-notifications-container'); // New: Container for home screen notifications
+        const notificationCardSeeAll = document.getElementById('notification-card-see-all'); 
         const notificationSidebar = document.getElementById('notification-sidebar');
         const closeSidebarBtn = document.getElementById('close-sidebar-btn');
 
@@ -639,7 +691,7 @@
 
             if (sender === 'user') {
                 messageDiv.classList.add('justify-end');
-                messageBubble.classList.add('bg-purple-600', 'text-white', 'chat-bubble-user');
+                messageBubble.classList.add('bg-red-600', 'text-white', 'chat-bubble-user');
             } else {
                 // Determine background color based on theme for bot bubbles
                 const isLightTheme = body.classList.contains('light-theme');
@@ -672,17 +724,14 @@
 
             // First GIF for the main loading animation
             const gifImg1 = document.createElement('img');
-            // IMPORTANT: Replace 'YOUR_MAIN_LOADING_GIF_BASE64_STRING_HERE' with the actual Base64 string of your main loading GIF
             gifImg1.src = MAIN_LOADING_GIF_BASE64;
             gifImg1.alt = 'Loading animation';
             gifImg1.classList.add('w-8', 'h-8', 'object-contain'); // Size for the GIF
 
             // Second GIF to replace "Kota is typing..." text
             const gifImg2 = document.createElement('img');
-            // IMPORTANT: Replace 'YOUR_TYPING_TEXT_GIF_BASE64_STRING_HERE' with the actual Base64 string of your text-replacement GIF
             gifImg2.src = TYPING_TEXT_GIF_BASE64;
             gifImg2.alt = 'Typing indicator';
-            // Adjust size as needed for "text" replacement. You might want 'w-auto' and a specific 'h-X'
             gifImg2.classList.add('h-4', 'w-auto', 'object-contain'); // Example size: auto width, 16px height
 
 
@@ -719,7 +768,6 @@
             let handledByLogic = false;
 
             // --- Handle specific commands and registration flow ---
-            // Existing logic for hardcoded responses
             if (registrationState !== 'none') {
                 if (registrationState === 'awaiting_emp_id') {
                     registrationData.employeeId = userMessage;
@@ -978,6 +1026,49 @@ Based on the "Daily Visit Performance Report (Latest Data)" provided in the cont
             }
         }
 
+        // === Dummy Notification Data (replace with real data fetching) ===
+        // Current time for timestamps
+        const now = new Date();
+
+        const dummyNotifications = [
+            { title: "Daily Sales Report Ready!", text: "Your sales data for July 23rd, 2025 is available.", time: "2:05 PM" },
+            { title: "New Visit Plan Alert", text: "5 critical outlets added to your visit plan for tomorrow.", time: "1:30 PM" },
+            { title: "Performance Review Scheduled", text: "Your monthly performance review is set for July 28th.", time: "Yesterday" },
+            { title: "System Update Complete", text: "Kota Sales Assistant has been updated with new features.", time: "July 22nd" },
+            { title: "New Leads Arrived!", text: "3 new potential customer leads have been added.", time: "10:00 AM" }
+        ];
+
+        function renderRecentNotifications() {
+            if (!recentNotificationsContainer) return; // Exit if container doesn't exist
+
+            recentNotificationsContainer.innerHTML = ''; // Clear existing notifications
+
+            // Display only the latest 3 notifications
+            const notificationsToDisplay = dummyNotifications.slice(0, 3); 
+
+            notificationsToDisplay.forEach(notif => {
+                const notificationDiv = document.createElement('div');
+                notificationDiv.classList.add('home-notification-card'); // Use the new class
+                notificationDiv.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="home-notification-icon">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <div class="home-notification-content">
+                        <p class="home-notification-title">${notif.title}</p>
+                        <p class="home-notification-text">${notif.text}</p>
+                    </div>
+                    <span class="home-notification-time text-tertiary">${notif.time}</span>
+                `;
+                recentNotificationsContainer.appendChild(notificationDiv);
+
+                // Add event listener to open sidebar when clicking this notification card
+                notificationDiv.addEventListener('click', () => {
+                    notificationSidebar.classList.add('is-open');
+                });
+            });
+        }
+
+
         // === Event Listeners ===
         // Event listeners for Login and Signup buttons
         if (loginBtn) {
@@ -985,10 +1076,10 @@ Based on the "Daily Visit Performance Report (Latest Data)" provided in the cont
                 const employeeId = employeeIdInput.value.trim();
                 const password = passwordInput.value.trim();
 
-                // Simple validation for demonstration
                 if (employeeId === "IFBAPPL00499" && password === "Cloud#123") {
                     alert("Login successful!");
                     showScreen(homeScreen);
+                    renderRecentNotifications(); // Render notifications after successful login
                 } else {
                     alert("Invalid Employee ID or Password. Please try again.");
                 }
@@ -998,19 +1089,17 @@ Based on the "Daily Visit Performance Report (Latest Data)" provided in the cont
         if (signupBtn) {
             signupBtn.addEventListener('click', () => {
                 alert("Please contact your administrator to sign up for a new account.");
-                // Potentially navigate to a signup flow if it were implemented
-                // For now, it's just an alert as per typical enterprise app behavior
             });
         }
 
         // Event listeners for the cards on the home screen
-        if (talkWithEchoCard) { // Check if element exists before adding listener
+        if (talkWithEchoCard) { 
             talkWithEchoCard.addEventListener('click', () => {
                 showScreen(chatScreen);
             });
         }
 
-        if (chatWithEchoCard) { // Check if element exists before adding listener
+        if (chatWithEchoCard) { 
             chatWithEchoCard.addEventListener('click', () => {
                 showScreen(chatScreen);
             });
@@ -1020,23 +1109,23 @@ Based on the "Daily Visit Performance Report (Latest Data)" provided in the cont
             showScreen(homeScreen);
         });
 
-        sendMessageBtn.addEventListener('click', () => sendMessage()); // Call without override
+        sendMessageBtn.addEventListener('click', () => sendMessage()); 
 
         chatInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
-                sendMessage(); // Call without override
+                sendMessage(); 
             }
         });
 
         // New LLM feature button event listeners
         salesInsightsBtn.addEventListener('click', () => {
-            addMessage("Sales Insights ✨", 'user'); // Add user's "click" message to chat
-            sendMessage('sales insights'); // Send specific command to LLM
+            addMessage("Sales Insights ✨", 'user'); 
+            sendMessage('sales insights'); 
         });
 
         visitPlanBtn.addEventListener('click', () => {
-            addMessage("Visit Plan ✨", 'user'); // Add user's "click" message to chat
-            sendMessage('visit plan'); // Send specific command to LLM
+            addMessage("Visit Plan ✨", 'user'); 
+            sendMessage('visit plan'); 
         });
 
         // Theme toggle event listeners
@@ -1050,24 +1139,26 @@ Based on the "Daily Visit Performance Report (Latest Data)" provided in the cont
             themeToggleChat.addEventListener('change', toggleTheme);
         }
 
-        // NEW: Event listeners for Notification Sidebar
-        if (notificationGif) {
-            notificationGif.addEventListener('click', () => {
-                notificationSidebar.classList.add('is-open'); // Triggers slide animation
+        // Event listeners for Notification Card/Sidebar
+        if (notificationCardSeeAll) { // Clicking 'See all' on the notification card also opens the sidebar
+            notificationCardSeeAll.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent issues if this button was inside another clickable area
+                notificationSidebar.classList.add('is-open'); 
             });
         }
 
         if (closeSidebarBtn) {
             closeSidebarBtn.addEventListener('click', () => {
-                notificationSidebar.classList.remove('is-open'); // Resets animation
+                notificationSidebar.classList.remove('is-open'); 
             });
         }
 
         // Initialize by showing the welcome screen and applying saved theme
         document.addEventListener('DOMContentLoaded', () => {
             showScreen(welcomeScreen);
-            const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+            const savedTheme = localStorage.getItem('theme') || 'dark'; 
             applyTheme(savedTheme);
+            // Notifications are rendered AFTER login, so no need to call here initially
         });
     </script>
 </body>
