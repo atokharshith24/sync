@@ -6,42 +6,14 @@
     <title>Kota Sales Assistant</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS Custom Properties for Theming */
-        :root {
-            --bg-color: #0A0A0A;
-            --container-bg-color: #171717;
-            --text-color: #FFFFFF;
-            --text-secondary-color: #9CA3AF;
-            --card-bg-color: #262626;
-            --input-bg-color: #262626;
-            --input-placeholder-color: #6B7280;
-            --accent-color: #DC2626;
-            --accent-light-color: #EF4444;
-            --red-100: #FEE2E2;
-            --red-200: #FECACA;
-            --red-700: #B91C1C;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --shadow-color: rgba(0, 0, 0, 0.4);
-            --transition-speed: 0.3s;
+        /* Base Styles */
+        html {
+            box-sizing: border-box;
+            height: 100%;
         }
-
-        body.light-theme {
-            --bg-color: #F3F4F6;
-            --container-bg-color: #FFFFFF;
-            --text-color: #1F2937;
-            --text-secondary-color: #4B5563;
-            --card-bg-color: #E5E7EB;
-            --input-bg-color: #E5E7EB;
-            --input-placeholder-color: #6B7280;
-            --border-color: rgba(0, 0, 0, 0.1);
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --red-700: #DC2626;
+        *, *::before, *::after {
+            box-sizing: inherit;
         }
-
-        /* Global & Base Styles */
-        html { box-sizing: border-box; }
-        *, *::before, *::after { box-sizing: inherit; }
-
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -50,26 +22,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+            background-color: #F3F4F6;
+            color: #1F2937;
+            transition: background-color 0.3s ease, color 0.3s ease;
             overflow-x: hidden;
         }
 
-        h1, h2, h3, p, ul { margin: 0; padding: 0; }
-        
         /* App Container */
         .app-container {
+            position: relative;
             width: 100%;
             max-width: 500px;
-            background-color: var(--container-bg-color);
+            background-color: #FFFFFF;
             border-radius: 24px;
-            box-shadow: 0 10px 20px var(--shadow-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
+            height: 100%;
             min-height: 100vh;
             overflow: hidden;
-            position: relative;
         }
 
         /* Screens */
@@ -81,29 +52,43 @@
             box-sizing: border-box;
             overflow-y: auto;
         }
-        .screen[data-screen].active { display: flex; }
-        .screen[data-screen].slide-in {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transform: translateY(100%);
-            transition: transform 0.4s ease-out;
-            z-index: 2000;
+        .screen.flex {
+            display: flex;
         }
-        .screen[data-screen].slide-in.active { transform: translateY(0%); }
+        .screen.hidden {
+            display: none;
+        }
+
+        /* Scrollbar hiding for specific containers */
+        .chat-messages::-webkit-scrollbar,
+        .quick-reports-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        .chat-messages,
+        .quick-reports-scroll-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
 
         /* Welcome Screen */
-        .welcome-header { margin-top: 2rem; }
+        #welcome-screen {
+            padding-top: 1rem;
+            position: relative;
+        }
+        .welcome-header {
+            text-align: left;
+            margin-top: 2rem;
+        }
         .welcome-header h1 {
             font-size: 2.25rem;
             font-weight: 700;
+            color: #1F2937;
+            margin: 0;
         }
         .welcome-header h2 {
             font-size: 1.5rem;
             font-weight: 600;
-            color: var(--accent-light-color);
+            color: #DC2626;
             margin-top: 0.25rem;
             display: flex;
             align-items: center;
@@ -115,23 +100,25 @@
             object-fit: contain;
         }
         .welcome-header p {
-            color: var(--text-secondary-color);
+            color: #4B5563;
             margin-top: 0.5rem;
             font-size: 0.875rem;
             line-height: 1.5;
         }
+
         .welcome-image-container {
             width: 100%;
-            margin: 2rem 0;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
         }
         .welcome-image-container img {
             width: 100%;
             height: auto;
             border-radius: 1rem;
         }
+
         .login-form {
             width: 100%;
             margin-bottom: 2rem;
@@ -143,24 +130,28 @@
             width: 100%;
             padding: 0.75rem;
             border-radius: 0.75rem;
-            background-color: var(--input-bg-color);
-            color: var(--text-color);
+            background-color: #E5E7EB;
+            color: #1F2937;
             border: none;
             outline: none;
-            transition: all var(--transition-speed) ease;
         }
-        .input-field::placeholder { color: var(--input-placeholder-color); }
-        .input-field:focus { outline: 2px solid var(--accent-color); }
+        .input-field::placeholder {
+            color: #6B7280;
+        }
+        .input-field:focus {
+            outline: 2px solid #DC2626;
+        }
         #login-btn {
+            width: 100%;
             padding: 0.75rem 1rem;
-            background: linear-gradient(to right, var(--accent-color), var(--red-700));
-            color: var(--text-color);
+            background: linear-gradient(to right, #DC2626, #991B1B);
+            color: #FFFFFF;
             font-size: 1.125rem;
             font-weight: 600;
             border-radius: 1rem;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             cursor: pointer;
-            transition: all var(--transition-speed) ease;
+            transition: all 0.3s ease-in-out;
             border: none;
             display: flex;
             align-items: center;
@@ -169,65 +160,73 @@
         }
         #login-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-        
+        #login-btn svg {
+            color: #FFFFFF;
+        }
+
         /* Home Screen */
-        .home-header {
+        #home-screen .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
             margin-top: 0.5rem;
         }
-        .home-header h1 {
+        #home-screen .header h1 {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--accent-color);
+            color: #DC2626;
+            margin: 0;
         }
-        .home-header button {
-            color: var(--text-secondary-color);
+        #home-screen .header button {
+            color: #6B7280;
             cursor: pointer;
             border: none;
             background: none;
             padding: 0;
-            transition: color var(--transition-speed) ease;
         }
-        .home-header button:hover { color: var(--text-color); }
 
-        .home-section { margin-bottom: 2rem; }
+        .home-section {
+            margin-bottom: 2rem;
+        }
 
-        /* Quick Reports */
-        .quick-reports-header {
+        /* Quick Reports & "See All" buttons */
+        .quick-reports-header, .collapsible-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
         }
-        .quick-reports-header h3 {
+        .quick-reports-header h3, .collapsible-header h3 {
             font-size: 1.25rem;
             font-weight: 600;
-            color: var(--text-color);
+            color: #1F2937;
+            margin: 0;
         }
-        .quick-reports-header button {
-            color: var(--accent-color);
+        .see-all-btn {
+            color: #DC2626;
             font-size: 0.875rem;
             border: none;
             background: none;
             cursor: pointer;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            font-weight: 600;
+        }
+        .see-all-btn:hover {
+            color: #EF4444;
         }
 
         .quick-reports-scroll-container {
             overflow-x: auto;
             white-space: nowrap;
             padding-bottom: 1rem;
-            margin: 0 -1rem;
-            padding: 0 1rem 1rem;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            margin: 0 -1.5rem;
+            padding: 0 1.5rem 1rem;
         }
-        .quick-reports-scroll-container::-webkit-scrollbar { display: none; }
-        .quick-reports-list {
+        .quick-reports-scroll-container .inline-flex {
             display: inline-flex;
             gap: 0.5rem;
         }
@@ -238,29 +237,27 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            cursor: pointer;
         }
-        .quick-report-icon {
+        .quick-report-item div {
             width: 48px;
             height: 48px;
-            background-color: var(--card-bg-color);
+            background-color: #FECACA;
             border-radius: 9999px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-color);
-            transition: background-color var(--transition-speed) ease;
-        }
-        .quick-report-icon.accent-bg {
-            background-color: var(--red-200);
-            color: var(--red-700);
+            color: #B91C1C;
+            cursor: pointer;
         }
         .quick-report-item span {
             margin-top: 0.25rem;
             font-size: 0.75rem;
-            color: var(--text-secondary-color);
+            color: #4B5563;
+            white-space: normal;
         }
-        .quick-report-item:hover .quick-report-icon { background-color: var(--border-color); }
+        .quick-report-item:hover div {
+            background-color: #FCA5A5;
+        }
 
         /* Collapsible Sections */
         .collapsible-header {
@@ -279,160 +276,183 @@
         .collapsible-header h3 {
             font-size: 1.25rem;
             font-weight: 600;
-            color: var(--text-color);
-            margin: 0 0.5rem 0 0;
+            color: #1F2937;
+            margin: 0;
+            margin-right: 0.5rem;
         }
         .collapsible-header .collapsible-arrow {
             width: 0;
             height: 0;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
-            border-top: 8px solid var(--accent-light-color);
-            transition: transform var(--transition-speed) ease;
+            border-top: 8px solid #DC2626;
+            transition: transform 0.3s ease-in-out;
             flex-shrink: 0;
         }
-        .collapsible-header .collapsible-arrow.rotate-180 { transform: rotate(180deg); }
-        .section-content {
-            max-height: 500px; /* A large number */
-            overflow: hidden;
-            transition: max-height var(--transition-speed) ease-in-out;
+        .collapsible-header .collapsible-arrow.rotate-180 {
+            transform: rotate(180deg);
         }
-        .section-content.collapsed { max-height: 0; }
+        .section-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+        }
+        .section-content.hidden {
+            max-height: 0;
+            visibility: hidden;
+        }
 
         /* Home Notifications (Recent Insights) */
         .home-notification-card {
-            background-color: var(--card-bg-color);
+            background-color: #E5E7EB;
             padding: 1rem;
             border-radius: 0.75rem;
             margin-bottom: 0.75rem;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             cursor: pointer;
             transition: background-color 0.2s ease-in-out;
             display: flex;
             align-items: flex-start;
             gap: 0.75rem;
         }
-        .home-notification-card:hover { background-color: rgba(255, 255, 255, 0.1); }
-        .light-theme .home-notification-card:hover { background-color: rgba(0, 0, 0, 0.05); }
-        
+        .home-notification-card:hover {
+            background-color: #D1D5DB;
+        }
         .home-notification-card .home-notification-icon {
             flex-shrink: 0;
-            color: var(--accent-light-color);
+            color: #DC2626;
         }
-        .home-notification-card .home-notification-content { flex-grow: 1; }
+        .home-notification-card .home-notification-content {
+            flex-grow: 1;
+        }
         .home-notification-card .home-notification-title {
             font-weight: 600;
+            color: #1F2937;
             font-size: 0.875rem;
             line-height: 1.25rem;
         }
         .home-notification-card .home-notification-text {
-            color: var(--text-secondary-color);
+            color: #6B7280;
             font-size: 0.75rem;
             line-height: 1rem;
             margin-top: 0.25rem;
         }
         .home-notification-card .home-notification-time {
             font-size: 0.625rem;
-            color: var(--input-placeholder-color);
+            color: #9CA3AF;
             text-align: right;
             flex-shrink: 0;
             margin-top: 0.1rem;
         }
 
         /* Queries to Know Cards */
-        .queries-to-know-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        .query-card {
-            background-color: var(--card-bg-color);
+        #queries-to-know-container > div {
+            background-color: #E5E7EB;
             padding: 1rem;
             border-radius: 0.75rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
             cursor: pointer;
-            transition: background-color var(--transition-speed) ease;
+            transition: background-color 0.2s ease-in-out;
         }
-        .query-card:hover { background-color: rgba(255, 255, 255, 0.1); }
-        .light-theme .query-card:hover { background-color: rgba(0, 0, 0, 0.05); }
-
-        .query-card svg { color: var(--red-700); }
-        .query-card p {
-            color: var(--text-secondary-color);
+        #queries-to-know-container > div:hover {
+            background-color: #D1D5DB;
+        }
+        #queries-to-know-container > div svg {
+            color: #DC2626;
+        }
+        #queries-to-know-container > div p {
+            color: #A3A3A3;
             font-size: 0.875rem;
+            margin: 0;
         }
         .card-disabled {
             pointer-events: none;
             opacity: 0.5;
         }
-        .card-disabled p { color: var(--text-secondary-color); }
-        .card-disabled svg { color: var(--input-placeholder-color); }
-        
-        /* Report Screen */
-        .report-header {
+        .card-disabled p {
+            color: #6B7280;
+        }
+        .card-disabled svg {
+            color: #9CA3AF;
+        }
+
+        /* Report Screens */
+        .report-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #F3F4F6;
+            transform: translateY(100%);
+            transition: transform 0.4s ease-out;
+            z-index: 2000;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            display: none;
+            flex-direction: column;
+        }
+        .report-screen.is-active {
+            transform: translateY(0%);
+            display: flex;
+        }
+        .report-screen .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
         }
-        .report-header button {
-            color: var(--text-secondary-color);
+        .report-screen .header button {
+            color: #6B7280;
             font-size: 1.125rem;
             border: none;
             background: none;
             cursor: pointer;
             display: flex;
             align-items: center;
-            transition: color var(--transition-speed) ease;
         }
-        .report-header button:hover { color: var(--text-color); }
-        .report-header h2 {
+        .report-screen .header button:hover {
+            color: #1F2937;
+        }
+        .report-screen .header h2 {
             font-size: 1.25rem;
             font-weight: 700;
-            color: var(--red-700);
+            color: #DC2626;
+            margin: 0;
         }
+
         .report-content {
             flex-grow: 1;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
         }
-        .report-content::-webkit-scrollbar { display: none; }
-
         .report-content-card {
-            background-color: var(--card-bg-color);
+            background-color: #E5E7EB;
             padding: 1.25rem;
             border-radius: 0.75rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            color: #E5E7EB;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            color: #1F2937;
         }
-        .light-theme .report-content-card { color: var(--text-color); }
-
         .report-section-title {
             font-size: 1.125rem;
             font-weight: 600;
-            color: var(--accent-light-color);
+            color: #DC2626;
             margin-bottom: 0.5rem;
             padding-bottom: 0.25rem;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        .light-theme .report-section-title { color: var(--accent-color); }
         .report-section-title svg {
-            color: var(--accent-light-color);
+            color: #DC2626;
             width: 20px;
             height: 20px;
             flex-shrink: 0;
         }
-        .light-theme .report-section-title svg { color: var(--accent-color); }
-        
         .report-list {
             list-style: none;
             padding-left: 1rem;
@@ -443,160 +463,187 @@
             margin-bottom: 0.75rem;
             font-size: 0.875rem;
             line-height: 1.25rem;
-            color: #CBD5E0;
+            color: #4B5563;
         }
-        .light-theme .report-list li { color: var(--text-secondary-color); }
         .report-list li strong {
-            color: var(--text-color);
+            color: #1F2937;
             font-weight: 700;
         }
         .report-sub-item {
             display: block;
             margin-left: 1rem;
             font-size: 0.8125rem;
-            color: var(--text-secondary-color);
+            color: #6B7280;
             line-height: 1.125rem;
         }
         .report-link {
             display: block;
             margin-top: 1.5rem;
             text-align: center;
-            color: var(--accent-color);
+            color: #DC2626;
             font-weight: 600;
             cursor: pointer;
             text-decoration: underline;
             transition: color 0.2s ease;
         }
-        .report-link:hover { color: var(--accent-light-color); }
-        
-        /* Notification Sidebar */
-        #notification-sidebar {
+        .report-link:hover {
+            color: #EF4444;
+        }
+
+        /* Sidebar & Notification styling */
+        .sidebar {
             position: absolute;
             top: 0;
             right: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--container-bg-color);
+            background-color: #F3F4F6;
             transform: translateX(100%);
             transition: transform 0.5s ease-out;
             z-index: 1000;
-            box-shadow: -5px 0 15px var(--shadow-color);
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
         }
-        @media (min-width: 768px) { #notification-sidebar { width: 70%; } }
-        #notification-sidebar.is-open { transform: translateX(0%); }
-        #notification-sidebar .sidebar-header {
+        @media (min-width: 768px) {
+            .sidebar {
+                width: 70%;
+            }
+        }
+        .sidebar.is-open {
+            transform: translateX(0%);
+        }
+        .sidebar .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
         }
-        #notification-sidebar .sidebar-header h2 {
+        .sidebar .header h2 {
             font-size: 1.5rem;
             font-weight: 700;
+            color: #1F2937;
+            margin: 0;
         }
-        #notification-sidebar .sidebar-header button {
+        .sidebar .header button {
             font-size: 2rem;
             background: none;
             border: none;
-            color: var(--text-secondary-color);
+            color: #4B5563;
             cursor: pointer;
             line-height: 1;
             padding: 0;
             margin-right: -0.5rem;
-            transition: color var(--transition-speed) ease;
         }
-        #notification-sidebar .sidebar-header button:hover { color: var(--text-color); }
-        .notification-item {
-            background-color: var(--card-bg-color);
+        .sidebar .header button:hover {
+            color: #1F2937;
+        }
+
+        /* Sidebar Content Styling */
+        .sidebar-menu-item, .notification-item {
+            background-color: #E5E7EB;
             padding: 1rem;
             border-radius: 0.5rem;
             margin-bottom: 0.75rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             opacity: 0;
             transform: translateY(20px);
             animation: slide-in-fade 0.5s ease-out forwards;
-        }
-        .notification-item:last-child { margin-bottom: 0; }
-        .notification-item p:first-child {
+            cursor: pointer;
             font-weight: 600;
+        }
+        .sidebar-menu-item:hover, .notification-item:hover {
+            background-color: #D1D5DB;
+        }
+        .sidebar-menu-item:last-child, .notification-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .sidebar-menu-item p {
+            color: #1F2937;
+        }
+        .notification-item p:first-child {
             font-size: 1.125rem;
             margin-bottom: 0.25rem;
+            color: #1F2937;
         }
         .notification-item p:last-child {
             font-size: 0.875rem;
-            color: var(--text-secondary-color);
+            color: #4B5563;
         }
         @keyframes slide-in-fade {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
-        #notification-sidebar.is-open .notification-item:nth-child(1) { animation-delay: 0.1s; }
-        #notification-sidebar.is-open .notification-item:nth-child(2) { animation-delay: 0.2s; }
-        #notification-sidebar.is-open .notification-item:nth-child(3) { animation-delay: 0.3s; }
-        #notification-sidebar.is-open .notification-item:nth-child(4) { animation-delay: 0.4s; }
-        
-        /* Theme Toggle Switch */
-        .theme-switch {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            display: inline-block;
-            width: 40px;
-            height: 20px;
+        .sidebar.is-open .sidebar-menu-item:nth-child(1) { animation-delay: 0.1s; }
+        .sidebar.is-open .sidebar-menu-item:nth-child(2) { animation-delay: 0.2s; }
+        .sidebar.is-open .notification-item:nth-child(1) { animation-delay: 0.1s; }
+        .sidebar.is-open .notification-item:nth-child(2) { animation-delay: 0.2s; }
+        .sidebar.is-open .notification-item:nth-child(3) { animation-delay: 0.3s; }
+        .sidebar.is-open .notification-item:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Help/Feedback Section */
+        #feedback-section-container {
+            display: none;
+            flex-direction: column;
+            padding: 1rem 0;
         }
-        .theme-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
+        #feedback-section-container.active {
+            display: flex;
         }
-        .slider {
-            position: absolute;
+        .feedback-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #6B7280;
+            margin: 0 0 0.5rem;
+        }
+        .feedback-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            background-color: #FFFFFF;
+            color: #000000;
+            border: none;
+            outline: none;
+            resize: vertical;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 1rem;
+        }
+        .feedback-textarea::placeholder {
+            color: #6B7280;
+        }
+        .feedback-textarea:focus {
+            outline: 2px solid #DC2626;
+        }
+        .feedback-submit-btn {
+            background: linear-gradient(to right, #DC2626, #991B1B);
+            color: #FFFFFF;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #4A5568;
-            transition: .4s;
-            border-radius: 20px;
+            transition: transform 0.2s ease-in-out;
+            align-self: flex-end;
         }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='4'%3E%3C/circle%3E%3Cpath d='M12 2v2'%3E%3C/path%3E%3Cpath d='M12 20v2'%3E%3C/path%3E%3Cpath d='M4.93 4.93l1.41 1.41'%3E%3C/path%3E%3Cpath d='M17.66 17.66l1.41 1.41'%3E%3C/path%3E%3Cpath d='M2 12h2'%3E%3C/path%3E%3Cpath d='M20 12h2'%3E%3C/path%3E%3Cpath d='M4.93 19.07l1.41-1.41'%3E%3C/path%3E%3Cpath d='M17.66 6.34l1.41-1.41'%3E%3C/path%3E%3C/svg%3E");
-            background-size: 80%;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        input:checked + .slider { background-color: var(--accent-color); }
-        input:checked + .slider:before {
-            transform: translateX(20px);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'%3E%3C/path%3E%3C/svg%3E");
+        .feedback-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
     </style>
 </head>
-<body class="light-theme">
+<body>
     <div class="app-container">
 
-        <div id="welcome-screen" class="screen" data-screen="welcome">
-            <label class="theme-switch">
-                <input type="checkbox" id="theme-toggle">
-                <span class="slider"></span>
-            </label>
+        <div id="welcome-screen" class="screen flex">
             <div class="welcome-header">
-                <h1>Welcome to Kota!</h1>
-                <h2> Meet Sync
+                <img src="IFB logo.png" alt="Logo" style="width: 70px; height: 50px; object-fit: contain;">
+                <h2>
+                    Meet Sales-Guide
                     <img src="sync.gif" alt="Sync Icon">
                 </h2>
                 <p>Your AI Sales Assistant - helping you stay on top of your daily and monthly goals.</p>
@@ -614,55 +661,186 @@
             </div>
         </div>
 
-        <div id="home-screen" class="screen" data-screen="home">
-            <div class="home-header">
+        <div id="home-screen" class="screen hidden">
+            <div class="header">
                 <h1>Hi, Kota</h1>
-                <button id="open-sidebar-btn">
+                <button id="open-hamburger-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
             </div>
 
-            <section class="home-section">
+            <div class="home-section">
                 <div class="quick-reports-header">
                     <h3>Quick Reports</h3>
-                    <button>See all</button>
                 </div>
                 <div class="quick-reports-scroll-container">
-                    <div id="quick-reports-list" class="quick-reports-list">
+                    <div class="inline-flex">
+                        <div class="quick-report-item">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18.7 8.3L12 15l-3.3-3.3L3 18"></path></svg>
+                            </div>
+                            <span>Pr YTD</span>
                         </div>
+                        <div class="quick-report-item">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="10" y2="9"></line></svg>
+                            </div>
+                            <span>Pr QTD</span>
+                        </div>
+                        <div class="quick-report-item">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6"></path><path d="M6 20v-2"></path><path d="M18 20v-4"></path><path d="M12 14a4 4 0 0 1 0-8V2"></path><path d="M6 18a4 4 0 0 1 0-8V2"></path><path d="M18 16a4 4 0 0 1 0-8V2"></path></svg>
+                            </div>
+                            <span>Pr MTD</span>
+                        </div>
+                        <div class="quick-report-item">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                            </div>
+                            <span>Sc YTD</span>
+                        </div>
+                        <div class="quick-report-item">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            </div>
+                            <span>Sc QTD</span>
+                        </div>
+                        <div class="quick-report-item">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                            </div>
+                            <span>Sc MTD</span>
+                        </div>
+                        <div class="quick-report-item">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                            </div>
+                            <span>Critical Outlets</span>
+                        </div>
+                        <div class="quick-report-item">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+                            </div>
+                            <span>Pending Visits</span>
+                        </div>
+                        <div class="quick-report-item">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 12 18 2"></polygon></svg>
+                            </div>
+                            <span>CSR with Zero Sales</span>
+                        </div>
+                        <div class="quick-report-item">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                            </div>
+                            <span>CR with Zero Sales</span>
+                        </div>
+                        <div class="quick-report-item">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2l4-4"></path></svg>
+                            </div>
+                            <span>CSR > 10 unit Sales</span>
+                        </div>
+                    </div>
                 </div>
-            </section>
+            </div>
 
-            <section class="home-section" style="margin-top: -2rem;">
+            <div class="home-section" style="margin-top: -2rem;">
                 <div id="recent-insights-header" class="collapsible-header">
                     <div class="title-group">
                         <h3>Recent Insights</h3>
                         <div class="collapsible-arrow"></div>
                     </div>
-                    <button id="notification-card-see-all">See all</button>
+                    <button class="see-all-btn" id="notification-card-see-all">See all</button>
                 </div>
                 <div id="recent-notifications-container" class="section-content">
-                    </div>
-            </section>
+                </div>
+            </div>
 
-            <section class="home-section">
+            <div class="home-section">
                 <div id="queries-to-know-header" class="collapsible-header">
                     <div class="title-group">
                         <h3>Queries to Know</h3>
                         <div class="collapsible-arrow"></div>
                     </div>
-                    <button>See all</button>
                 </div>
-                <div id="queries-to-know-container" class="section-content">
-                    <div class="queries-to-know-list">
-                        </div>
+                <div id="queries-to-know-container" class="section-content" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div id="sales-plan-achievement-card" class="query-card">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                        <p>What is my sales plan achievement?</p>
+                    </div>
+                    <div id="critical-outlets-card" class="query-card">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle><line x1="12" y1="18" x2="12" y2="18"></line><line x1="12" y1="15" x2="12" y2="12"></line></svg>
+                        <p>Show me critical outlets to visit.</p>
+                    </div>
+                    <div id="top-employees-card" class="query-card">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                        <p>Who are the top 3 CSR employees?</p>
+                    </div>
+                    <div id="visit-adherence-card" class="query-card">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2l4-4"></path></svg>
+                        <p>What is my visit adherence?</p>
+                    </div>
                 </div>
-            </section>
+            </div>
         </div>
 
-        <div id="daily-sales-report-screen" class="screen slide-in" data-screen="daily-sales-report">
-            <div class="report-header">
-                <button id="daily-sales-back-btn">
+        <div id="daily-visit-performance-screen" class="report-screen">
+            <div class="header">
+                <button class="report-back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <span>Back</span>
+                </button>
+                <h2>Daily Visit Performance</h2>
+            </div>
+            <div class="report-content">
+                <div class="report-content-card">
+                    <h3 class="report-section-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        Visit Metrics:
+                    </h3>
+                    <ul class="report-list">
+                        <li>Total Outlets: <strong>34</strong></li>
+                        <li>Total Visits Completed: <strong>18</strong></li>
+                        <li>Visited Adherence: <strong>94.44%</strong></li>
+                        <li>Unplanned Visit Perct.: <strong>2.94%</strong></li>
+                    </ul>
+                </div>
+                <div class="report-content-card">
+                    <h3 class="report-section-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        Critical Outlets in Visit Plan:
+                    </h3>
+                    <ul class="report-list">
+                        <li>
+                            <span class="report-item">a. Dealer Name :</span> James & Co (1000221)<br>
+                            <span class="report-sub-item">Target: <strong>141.0</strong> | Achieved: <strong>4.96</strong></span>
+                        </li>
+                        <li>
+                            <span class="report-item">b. Dealer Name :</span> DARLING JAMES ELECTRONICS (1032298)<br>
+                            <span class="report-sub-item">Target: <strong>94.0</strong> | Achieved: <strong>71.28</strong></span>
+                        </li>
+                        <li>
+                            <span class="report-item">c. Dealer Name :</span> VASANTH & CO (7012168)<br>
+                            <span class="report-sub-item">Target: <strong>34.0</strong> | Achieved: <strong>64.71</strong></span>
+                        </li>
+                        <li>
+                            <span class="report-item">d. Dealer Name :</span> Sacs (1000327)<br>
+                            <span class="report-sub-item">Target: <strong>28.0</strong> | Achieved: <strong>39.29</strong></span>
+                        </li>
+                        <li>
+                            <span class="report-item">e. Dealer Name :</span> James Retail Private Limited (7006234)<br>
+                            <span class="report-sub-item">Target: <strong>27.0</strong> | Achieved: <strong>29.63</strong></span>
+                        </li>
+                    </ul>
+                </div>
+                <a href="#" class="report-link">Click to view detailed report</a>
+            </div>
+        </div>
+
+        <div id="daily-sales-report-screen" class="report-screen">
+            <div class="header">
+                <button class="report-back-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                     <span>Back</span>
                 </button>
@@ -719,104 +897,254 @@
             </div>
         </div>
 
-        <aside id="notification-sidebar">
-            <div class="sidebar-header">
+        <div id="csr-cr-performance-screen" class="report-screen">
+            <div class="header">
+                <button class="report-back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <span>Back</span>
+                </button>
+                <h2>CSR/CR Performance MTD</h2>
+            </div>
+            <div class="report-content">
+                <div class="report-content-card">
+                    <h3 class="report-section-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        Performance Summary:
+                    </h3>
+                    <ul class="report-list">
+                        <li>CSR with zero sales: <strong>3</strong></li>
+                        <li>CR with zero sales: <strong>0</strong></li>
+                    </ul>
+                </div>
+                <div class="report-content-card">
+                    <h3 class="report-section-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                        Top 3 CSR Employees:
+                    </h3>
+                    <ul class="report-list">
+                        <li>
+                            <span class="report-item">a. Employee:</span> IFBGCL660204 - RAMESHKANNA<br>
+                            <span class="report-sub-item">Target: <strong>21.0</strong> | Sales: <strong>19.0</strong></span>
+                        </li>
+                        <li>
+                            <span class="report-item">b. Employee:</span> IFBGCL661205 - VASUDEVAN S<br>
+                            <span class="report-sub-item">Target: <strong>10.0</strong> | Sales: <strong>8.0</strong></span>
+                        </li>
+                        <li>
+                            <span class="report-item">c. Employee:</span> IFBAPPL09841 - JEEVAN<br>
+                            <span class="report-sub-item">Target: <strong>30.0</strong> | Sales: <strong>22.0</strong></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="report-content-card">
+                    <h3 class="report-section-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        Bottom 3 CSR Employees:
+                    </h3>
+                    <ul class="report-list">
+                        <li>
+                            <span class="report-item">a. Employee:</span> IFBGCL666096 - BALAJI G G<br>
+                            <span class="report-sub-item">Target: <strong>0.0</strong> | Sales: <strong>9.0</strong></span>
+                        </li>
+                        <li>
+                            <span class="report-item">b. Employee:</span> IFBGCL662632 - KARTHIKEYAN<br>
+                            <span class="report-sub-item">Target: <strong>17.0</strong> | Sales: <strong>0.0</strong></span>
+                        </li>
+                        <li>
+                            <span class="report-item">c. Employee:</span> IFBGCL660984 - ROHINI MUTHUKRISHNAN<br>
+                            <span class="report-sub-item">Target: <strong>14.0</strong> | Sales: <strong>0.0</strong></span>
+                        </li>
+                    </ul>
+                </div>
+                <a href="#" class="report-link">Click to view detailed report</a>
+            </div>
+        </div>
+
+        <div id="summary-screen" class="report-screen">
+            <div class="header">
+                <button class="report-back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <span>Back</span>
+                </button>
+                <h2>Today's Summary</h2>
+            </div>
+            <div class="report-content">
+                <div class="report-content-card">
+                    <h3 class="report-section-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+                        Critical Areas:
+                    </h3>
+                    <p>The outlet "James Retail Private Limited" has seen a big drop in recent secondary sales activity over the last 2 months, with <strong>39 fewer items sold</strong> and <strong>20 fewer bills generated</strong> than usual. Additionally, there have been longer gaps between orders, which needs immediate attention to restore its performance.</p>
+                    <p style="margin-top: 1rem;">The primary sales achievement for categories like <strong>MW, KA, and REF-DC</strong> is significantly behind target by <strong>100%, 100%, and 96.61%</strong>, respectively. These gaps require focused efforts to improve sales in these categories.</p>
+                </div>
+                <div class="report-content-card">
+                    <h3 class="report-section-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"></path><path d="M15.5 8.5L12 12l-3.5-3.5"></path><path d="M12 12l3.5 3.5-3.5 3.5"></path></svg>
+                        Positive Area:
+                    </h3>
+                    <p>Your visit adherence is excellent at <strong>94.44%</strong>, with minimal unplanned visits at just <strong>2.94%</strong>. This shows strong planning and execution in your outlet visits.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="query-popup-screen" class="report-screen">
+            <div class="header">
+                <button class="report-back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <span>Back</span>
+                </button>
+                <h2 id="query-popup-title"></h2>
+            </div>
+            <div class="report-content">
+                <div class="report-content-card">
+                    <h3 class="report-section-title">
+                        <span id="query-popup-icon-container"></span>
+                        <span id="query-popup-card-title"></span>
+                    </h3>
+                    <div id="query-popup-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="hamburger-sidebar" class="sidebar">
+            <div class="header">
+                <h2>Menu</h2>
+                <button id="close-hamburger-btn">&times;</button>
+            </div>
+            <div id="hamburger-menu-list">
+                <div class="sidebar-menu-item" id="notifications-menu-btn">
+                    <p>Notifications</p>
+                </div>
+                <div class="sidebar-menu-item" id="help-menu-btn">
+                    <p>Help</p>
+                </div>
+            </div>
+            <div id="feedback-section-container">
+                <div class="feedback-section">
+                    <h3>Feedback</h3>
+                    <textarea id="feedback-textarea" class="feedback-textarea" placeholder="Type your feedback here..."></textarea>
+                    <button id="submit-feedback-btn" class="feedback-submit-btn">Submit</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="notification-sidebar" class="sidebar">
+            <div class="header">
                 <h2>Notifications</h2>
-                <button id="close-sidebar-btn">&times;</button>
+                <button id="close-notifications-btn">&times;</button>
             </div>
             <div id="notification-list">
-                </div>
-        </aside>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Data for dynamic content generation
-        const quickReportsData = [
-            { id: 'daily-sales-icon', text: 'Daily Sales', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`, accent: true },
-            { id: 'visit-perf-icon', text: 'Visit Perf.', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="10" y2="9"></line></svg>` },
-            { id: 'csr-perf-icon', text: 'CSR Perf.', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6"></path><path d="M6 20v-2"></path><path d="M18 20v-4"></path><path d="M12 14a4 4 0 0 1 0-8V2"></path><path d="M6 18a4 4 0 0 1 0-8V2"></path><path d="M18 16a4 4 0 0 1 0-8V2"></path></svg>` },
-            { id: 'critical-icon', text: 'Critical', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>` },
-            { id: 'zero-sales-icon', text: 'Zero Sales', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>` },
-            { id: 'market-trend-icon', text: 'Market Trend', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>` },
-            { id: 'growth-rate-icon', text: 'Growth Rate', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18.7 8.3L12 15l-3.3-3.3L3 18"></path></svg>` },
-            { id: 'product-mix-icon', text: 'Product Mix', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 12 18 2"></polygon></svg>` },
-            { id: 'faq-icon', text: 'FAQ', svg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>` }
-        ];
+        // Get references to screen elements
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const homeScreen = document.getElementById('home-screen');
+        const dailySalesScreen = document.getElementById('daily-sales-report-screen');
+        const dailyVisitScreen = document.getElementById('daily-visit-performance-screen');
+        const csrCrScreen = document.getElementById('csr-cr-performance-screen');
+        const summaryScreen = document.getElementById('summary-screen');
+        const queryPopupScreen = document.getElementById('query-popup-screen');
 
-        const dummyNotifications = [
-            { title: "Daily Sales Report Ready!", text: "Your sales data for July 23rd, 2025 is available.", time: "2:05 PM" },
-            { title: "New Visit Plan Alert", text: "5 critical outlets added to your visit plan for tomorrow.", time: "1:30 PM" },
-            { title: "Performance Review Scheduled", text: "Your monthly performance review is set for July 28th.", time: "Yesterday" },
-            { title: "System Update Complete", text: "Kota Sales Assistant has been updated with new features.", time: "July 22nd" },
-            { title: "Team Meeting Reminder", text: "Don't forget the weekly sales sync at 9 AM tomorrow!", time: "4:00 PM" } 
-        ];
-
-        const queriesToKnowData = [
-            { text: "What is my sales plan achievement?", iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>`, disabled: true },
-            { text: "Show me critical outlets to visit.", iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle><line x1="12" y1="18" x2="12" y2="18"></line><line x1="12" y1="15" x2="12" y2="12"></line></svg>`, disabled: true },
-            { text: "Who are the top 3 CSR employees?", iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>` },
-            { text: "What is my visit adherence?", iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2l4-4"></path></svg>` }
-        ];
-
-        // Screen Elements
-        const screens = document.querySelectorAll('.screen');
-        const appContainer = document.querySelector('.app-container');
-
-        // Buttons and Toggles
+        // Get references to buttons/cards
         const loginBtn = document.getElementById('login-btn');
         const employeeIdInput = document.getElementById('employee-id-input');
         const passwordInput = document.getElementById('password-input');
-        const dailySalesBackBtn = document.getElementById('daily-sales-back-btn');
-        const themeToggle = document.getElementById('theme-toggle');
-        const openSidebarBtn = document.getElementById('open-sidebar-btn');
-        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
-        const notificationCardSeeAll = document.getElementById('notification-card-see-all');
 
-        // Containers
-        const quickReportsList = document.getElementById('quick-reports-list');
-        const recentNotificationsContainer = document.getElementById('recent-notifications-container');
-        const queriesToKnowContainer = document.getElementById('queries-to-know-container');
+        // Get references for sidebars and their elements
+        const hamburgerSidebar = document.getElementById('hamburger-sidebar');
         const notificationSidebar = document.getElementById('notification-sidebar');
-        const notificationList = document.getElementById('notification-list');
+        const openHamburgerBtn = document.getElementById('open-hamburger-btn');
+        const closeHamburgerBtn = document.getElementById('close-hamburger-btn');
+        const closeNotificationsBtn = document.getElementById('close-notifications-btn');
+        const notificationsMenuBtn = document.getElementById('notifications-menu-btn');
+        const helpMenuBtn = document.getElementById('help-menu-btn');
+        const notificationCardSeeAll = document.getElementById('notification-card-see-all');
+        const feedbackSectionContainer = document.getElementById('feedback-section-container');
+        const hamburgerMenuList = document.getElementById('hamburger-menu-list');
+        const submitFeedbackBtn = document.getElementById('submit-feedback-btn');
 
-        // Collapsible Headers
+        // Collapsible elements
         const recentInsightsHeader = document.getElementById('recent-insights-header');
         const queriesToKnowHeader = document.getElementById('queries-to-know-header');
+        const queriesToKnowContainer = document.getElementById('queries-to-know-container');
+        const recentNotificationsContainer = document.getElementById('recent-notifications-container');
 
-        // --- Screen Management ---
-        function showScreen(screenName) {
-            screens.forEach(screen => {
-                const isActive = screen.dataset.screen === screenName;
-                screen.classList.toggle('active', isActive);
+        // Get new elements for the query pop-up
+        const queryPopupTitle = document.getElementById('query-popup-title');
+        const queryPopupIconContainer = document.getElementById('query-popup-icon-container');
+        const queryPopupCardTitle = document.getElementById('query-popup-card-title');
+        const queryPopupContent = document.getElementById('query-popup-content');
 
-                // Handle the slide-in animation for the daily report screen
-                if (screen.classList.contains('slide-in')) {
-                    if (isActive) {
-                        setTimeout(() => screen.classList.add('active'), 10);
-                    } else {
-                        screen.classList.remove('active');
-                    }
-                }
+        // Get Query to Know Cards
+        const queryCards = document.querySelectorAll('#queries-to-know-container > div');
+
+        // --- Core Fix: Simplified showScreen and back button logic ---
+        function showScreen(screenToShow) {
+            const allScreens = [welcomeScreen, homeScreen, dailySalesScreen, dailyVisitScreen, csrCrScreen, summaryScreen, queryPopupScreen];
+
+            // First, hide all screens immediately by removing all classes
+            allScreens.forEach(screen => {
+                screen.classList.remove('flex', 'is-active');
+                screen.classList.add('hidden');
             });
+
+            // Then, show the new screen and apply transition classes
+            screenToShow.classList.remove('hidden');
+            screenToShow.classList.add('flex');
+
+            // Allow a brief moment for the browser to register the 'flex' class before adding 'is-active'
+            setTimeout(() => {
+                screenToShow.classList.add('is-active');
+            }, 10); // A very small delay is enough
         }
-        
-        // --- Dynamic Content Rendering ---
-        function renderQuickReports() {
-            if (!quickReportsList) return;
-            quickReportsList.innerHTML = quickReportsData.map(item => `
-                <div class="quick-report-item" data-report-id="${item.id}">
-                    <div class="quick-report-icon ${item.accent ? 'accent-bg' : ''}">
-                        ${item.svg}
-                    </div>
-                    <span>${item.text}</span>
-                </div>
-            `).join('');
-        }
+
+        // === Notification Data ===
+        const recentInsightsData = [
+            { title: "Daily Visit Performance", text: "Your visit plan for today is 34 outlets with 18 completed visits.", time: "2:05 PM", targetScreen: dailyVisitScreen },
+            { title: "Daily Sales Performance", text: "Target: 584.0 | Actual: 163.0", time: "2:05 PM", targetScreen: dailySalesScreen },
+            { title: "CSR/CR performance MTD", text: "Top 3 CSRs are performing well, but some have zero sales.", time: "1:30 PM", targetScreen: csrCrScreen },
+            { title: "Summary for today", text: "Alpha, your GenAI assistant, has prepared your daily summary.", time: "1:00 PM", targetScreen: summaryScreen }
+        ];
+
+        // === NEW & IMPROVED Queries to Know Data with AI-like responses ===
+        const queriesData = {
+            "sales-plan-achievement-card": {
+                title: "Sales Plan Achievement",
+                cardTitle: "Sales Performance Snapshot:",
+                iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>`,
+                content: `<p>Your MTD sales achievement is at <strong>27.9%</strong>, with <strong>163 units</strong> sold against a target of <strong>584 units</strong>. There's a clear opportunity to push sales, especially in underperforming categories.</p>`
+            },
+            "critical-outlets-card": {
+                title: "Critical Outlets to Visit",
+                cardTitle: "Top 3 Outlets Needing Attention:",
+                iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle><line x1="12" y1="18" x2="12" y2="18"></line><line x1="12" y1="15" x2="12" y2="12"></line></svg>`,
+                content: `<p>Your priority today should be these outlets based on their sales gap:</p><ul class="report-list"><li><strong>James Retail Private Limited (1017685)</strong>: Has a gap of <strong>74 units</strong>.</li><li><strong>DARLING JAMES ELECTRONICS (1032298)</strong>: Has a gap of <strong>67 units</strong>.</li><li><strong>James Retail Private Limited (7006234)</strong>: Has a gap of <strong>19 units</strong>.</li></ul>`
+            },
+            "top-employees-card": {
+                title: "Top 3 CSR Employees",
+                cardTitle: "Highest Performing CSRs MTD:",
+                iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>`,
+                content: `<p>Here are your top performers, based on Month-to-Date sales volume:</p><ul class="report-list"><li>🥇 <strong>RAMESHKANNA</strong> (IFBGCL660204) with <strong>19 units</strong>.</li><li>🥈 <strong>JEEVAN</strong> (IFBAPPL09841) with <strong>22 units</strong>.</li><li>🥉 <strong>VASUDEVAN S</strong> (IFBGCL661205) with <strong>8 units</strong>.</li></ul>`
+            },
+            "visit-adherence-card": {
+                title: "Visit Adherence",
+                cardTitle: "Daily Visit Efficiency:",
+                iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2l4-4"></path></svg>`,
+                content: `<p>Great work! Your visit adherence today is <strong>94.44%</strong>. This high rate shows you are effectively following your planned route and maximizing your time in the field. Keep it up!</p>`
+            }
+        };
 
         function renderRecentNotifications() {
             if (!recentNotificationsContainer) return;
-            recentNotificationsContainer.innerHTML = dummyNotifications.slice(0, 4).map(notif => `
-                <div class="home-notification-card">
+            recentNotificationsContainer.innerHTML = '';
+
+            recentInsightsData.slice(0, 4).forEach(notif => {
+                const notificationDiv = document.createElement('div');
+                notificationDiv.classList.add('home-notification-card');
+                notificationDiv.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="home-notification-icon">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                     </svg>
@@ -825,118 +1153,181 @@
                         <p class="home-notification-text">${notif.text}</p>
                     </div>
                     <span class="home-notification-time">${notif.time}</span>
-                </div>
-            `).join('');
-        }
-
-        function renderAllNotifications() {
-            if (!notificationList) return;
-            notificationList.innerHTML = dummyNotifications.map(notif => `
-                <div class="notification-item">
-                    <p>${notif.title}</p>
-                    <p>${notif.text}</p>
-                </div>
-            `).join('');
-        }
-
-        function renderQueriesToKnow() {
-            if (!queriesToKnowContainer) return;
-            const listContainer = queriesToKnowContainer.querySelector('.queries-to-know-list');
-            listContainer.innerHTML = queriesToKnowData.map(query => `
-                <div class="query-card ${query.disabled ? 'card-disabled' : ''}">
-                    ${query.iconSvg}
-                    <p>${query.text}</p>
-                </div>
-            `).join('');
-        }
-        
-        // --- Collapsible Section Logic ---
-        function setupCollapsible(header, content) {
-            if (!header || !content) return;
-            const arrow = header.querySelector('.collapsible-arrow');
-            header.addEventListener('click', (event) => {
-                if (event.target.tagName === 'BUTTON') return;
-                content.classList.toggle('collapsed');
-                arrow.classList.toggle('rotate-180');
+                `;
+                notificationDiv.addEventListener('click', () => {
+                    showScreen(notif.targetScreen);
+                });
+                recentNotificationsContainer.appendChild(notificationDiv);
             });
         }
-        
-        // --- Theme Management ---
-        function applyTheme(theme) {
-            document.body.classList.toggle('light-theme', theme === 'light');
-            themeToggle.checked = theme === 'light';
-            localStorage.setItem('theme', theme);
+        function renderAllNotifications() {
+            const notificationList = document.getElementById('notification-list');
+            if (!notificationList) return;
+            notificationList.innerHTML = '';
+
+            recentInsightsData.forEach(notif => {
+                const notificationDiv = document.createElement('div');
+                notificationDiv.classList.add('notification-item');
+                notificationDiv.innerHTML = `
+                    <p>${notif.title}</p>
+                    <p>${notif.text}</p>
+                `;
+                notificationDiv.addEventListener('click', () => {
+                    notificationSidebar.classList.remove('is-open');
+                    showScreen(notif.targetScreen);
+                });
+                notificationList.appendChild(notificationDiv);
+            });
         }
 
-        function toggleTheme() {
-            const currentTheme = localStorage.getItem('theme') || 'light';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            applyTheme(newTheme);
+        // === Collapsible Section Functions ===
+        function toggleSection(headerElement, contentElement, arrowElement) {
+            contentElement.classList.toggle('hidden');
+            arrowElement.classList.toggle('rotate-180');
         }
 
-        // --- Event Listeners ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initial render and setup
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            applyTheme(savedTheme);
-            showScreen('welcome');
-            renderQuickReports();
-            renderRecentNotifications();
-            renderQueriesToKnow();
-            renderAllNotifications();
-            setupCollapsible(recentInsightsHeader, recentNotificationsContainer);
-            setupCollapsible(queriesToKnowHeader, queriesToKnowContainer.querySelector('.queries-to-know-list'));
-        });
+        // --- NEW LOGIC FOR QUERIES TO KNOW ---
+        // Function to populate and show the query popup
+        function showQueryPopup(queryId) {
+            const data = queriesData[queryId];
+            if (!data) return;
 
+            queryPopupTitle.textContent = data.title;
+            queryPopupIconContainer.innerHTML = data.iconSvg;
+            queryPopupCardTitle.textContent = data.cardTitle;
+            queryPopupContent.innerHTML = data.content;
+
+            showScreen(queryPopupScreen);
+        }
+
+        // === Event Listeners ===
         if (loginBtn) {
             loginBtn.addEventListener('click', () => {
                 const employeeId = employeeIdInput.value.trim();
                 const password = passwordInput.value.trim();
+
                 if (employeeId === "IFBAPPL00499" && password === "Cloud#123") {
-                    showScreen('home');
+                    alert("Login successful!");
+                    showScreen(homeScreen);
+                    renderRecentNotifications();
                 } else {
                     alert("Invalid Employee ID or Password. Please try again.");
                 }
             });
         }
+        
+        // Universal back button logic for all report screens
+        document.querySelectorAll('.report-back-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const currentReportScreen = button.closest('.report-screen');
+                currentReportScreen.classList.remove('is-active');
+                setTimeout(() => {
+                    showScreen(homeScreen);
+                }, 400); 
+            });
+        });
 
-        if (quickReportsList) {
-            quickReportsList.addEventListener('click', (e) => {
-                const item = e.target.closest('.quick-report-item');
-                if (item && item.dataset.reportId === 'daily-sales-icon') {
-                    showScreen('daily-sales-report');
+        // Hamburger Menu & Notifications
+        if (openHamburgerBtn) {
+            openHamburgerBtn.addEventListener('click', () => {
+                hamburgerSidebar.classList.add('is-open');
+                hamburgerMenuList.style.display = 'block';
+                feedbackSectionContainer.style.display = 'none';
+            });
+        }
+        if (closeHamburgerBtn) {
+            closeHamburgerBtn.addEventListener('click', () => {
+                hamburgerSidebar.classList.remove('is-open');
+            });
+        }
+        if (notificationsMenuBtn) {
+            notificationsMenuBtn.addEventListener('click', () => {
+                hamburgerSidebar.classList.remove('is-open');
+                notificationSidebar.classList.add('is-open');
+                renderAllNotifications();
+            });
+        }
+        if (helpMenuBtn) {
+            helpMenuBtn.addEventListener('click', () => {
+                hamburgerMenuList.style.display = 'none';
+                feedbackSectionContainer.style.display = 'flex';
+            });
+        }
+        if (closeNotificationsBtn) {
+            closeNotificationsBtn.addEventListener('click', () => {
+                notificationSidebar.classList.remove('is-open');
+            });
+        }
+        if (notificationCardSeeAll) {
+            notificationCardSeeAll.addEventListener('click', (event) => {
+                event.stopPropagation();
+                notificationSidebar.classList.add('is-open');
+                renderAllNotifications();
+            });
+        }
+        if (submitFeedbackBtn) {
+            submitFeedbackBtn.addEventListener('click', () => {
+                const feedbackText = document.getElementById('feedback-textarea').value.trim();
+                if (feedbackText) {
+                    alert('Thank you for your feedback! It has been submitted.');
+                    document.getElementById('feedback-textarea').value = '';
+                    feedbackSectionContainer.style.display = 'none';
+                    hamburgerMenuList.style.display = 'block';
+                } else {
+                    alert('Please enter your feedback before submitting.');
                 }
             });
         }
 
-        if (dailySalesBackBtn) {
-            dailySalesBackBtn.addEventListener('click', () => {
-                showScreen('home');
+        // Collapsible sections
+        if (recentInsightsHeader) {
+            const arrow = recentInsightsHeader.querySelector('.collapsible-arrow');
+            recentInsightsHeader.addEventListener('click', (event) => {
+                if (event.target.tagName === 'BUTTON') {
+                    return;
+                }
+                toggleSection(recentInsightsHeader, recentNotificationsContainer, arrow);
             });
         }
-        
-        if (themeToggle) {
-            themeToggle.addEventListener('change', toggleTheme);
-        }
-
-        if (openSidebarBtn) {
-            openSidebarBtn.addEventListener('click', () => {
-                notificationSidebar.classList.add('is-open');
-            });
-        }
-
-        if (notificationCardSeeAll) { 
-            notificationCardSeeAll.addEventListener('click', (event) => {
-                event.stopPropagation();
-                notificationSidebar.classList.add('is-open'); 
+        if (queriesToKnowHeader) {
+            const arrow = queriesToKnowHeader.querySelector('.collapsible-arrow');
+            queriesToKnowHeader.addEventListener('click', (event) => {
+                if (event.target.tagName === 'BUTTON') {
+                    return;
+                }
+                toggleSection(queriesToKnowHeader, queriesToKnowContainer, arrow);
             });
         }
 
-        if (closeSidebarBtn) {
-            closeSidebarBtn.addEventListener('click', () => {
-                notificationSidebar.classList.remove('is-open'); 
+        // --- Event listeners for the new dynamic query cards ---
+        queryCards.forEach(card => {
+            card.addEventListener('click', () => {
+                showQueryPopup(card.id);
             });
-        }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showScreen(welcomeScreen);
+            renderRecentNotifications();
+
+            // Set initial state for collapsible sections
+            if (recentInsightsHeader && recentNotificationsContainer) {
+                const arrow = recentInsightsHeader.querySelector('.collapsible-arrow');
+                if (!recentNotificationsContainer.classList.contains('hidden')) {
+                    arrow.classList.remove('rotate-180');
+                } else {
+                    arrow.classList.add('rotate-180');
+                }
+            }
+            if (queriesToKnowHeader && queriesToKnowContainer) {
+                const arrow = queriesToKnowHeader.querySelector('.collapsible-arrow');
+                if (!queriesToKnowContainer.classList.contains('hidden')) {
+                    arrow.classList.remove('rotate-180');
+                } else {
+                    arrow.classList.add('rotate-180');
+                }
+            }
+        });
     </script>
 </body>
 </html>
