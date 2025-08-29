@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kota Sales Assistant</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Sales-Guide</title>
+    <link rel="icon" type="image/png" href="https://placehold.co/32x32/DC2626/FFFFFF?text=IFB">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Base Styles */
+        :root {
+            --brand-red: #DC2626;
+            --brand-red-dark: #991B1B;
+            --gray-bg: #F3F4F6;
+            --gray-light: #E5E7EB;
+            --gray-text: #6B7280;
+            --dark-text: #1F2937;
+            --card-border: #E5E7EB;
+            --pure-white: #FFFFFF;
+        }
         html {
             box-sizing: border-box;
             height: 100%;
@@ -17,14 +28,13 @@
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 1rem;
+            padding: 0;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #F3F4F6;
-            color: #1F2937;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            background-color: var(--gray-bg);
+            color: var(--dark-text);
             overflow-x: hidden;
         }
 
@@ -33,13 +43,12 @@
             position: relative;
             width: 100%;
             max-width: 500px;
-            background-color: #FFFFFF;
-            border-radius: 24px;
+            background-color: var(--pure-white);
+            border-radius: 0;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
-            height: 100%;
-            min-height: 100vh;
+            height: 100vh;
             overflow: hidden;
         }
 
@@ -51,44 +60,41 @@
             padding: 1.5rem;
             box-sizing: border-box;
             overflow-y: auto;
+            width: 100%;
+            transition: transform 0.4s ease-out;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
         }
-        .screen.flex {
+        .screen.active {
             display: flex;
+            transform: translateY(0);
+            z-index: 200;
         }
-        .screen.hidden {
-            display: none;
+        .screen.inactive {
+            transform: translateY(100%);
         }
-
-        /* Scrollbar hiding for specific containers */
-        .chat-messages::-webkit-scrollbar,
-        .quick-reports-scroll-container::-webkit-scrollbar {
-            display: none;
+        
+        #welcome-screen {
+            background-color: var(--pure-white);
+            padding-top: 1rem;
         }
-        .chat-messages,
-        .quick-reports-scroll-container {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        #home-screen,
+        .report-screen,
+        .sidebar {
+            background-color: var(--pure-white);
         }
 
         /* Welcome Screen */
-        #welcome-screen {
-            padding-top: 1rem;
-            position: relative;
-        }
         .welcome-header {
             text-align: left;
             margin-top: 2rem;
         }
-        .welcome-header h1 {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: #1F2937;
-            margin: 0;
-        }
         .welcome-header h2 {
             font-size: 1.5rem;
             font-weight: 600;
-            color: #DC2626;
+            color: var(--brand-red);
             margin-top: 0.25rem;
             display: flex;
             align-items: center;
@@ -100,12 +106,11 @@
             object-fit: contain;
         }
         .welcome-header p {
-            color: #4B5563;
+            color: var(--gray-text);
             margin-top: 0.5rem;
             font-size: 0.875rem;
             line-height: 1.5;
         }
-
         .welcome-image-container {
             width: 100%;
             display: flex;
@@ -118,7 +123,6 @@
             height: auto;
             border-radius: 1rem;
         }
-
         .login-form {
             width: 100%;
             margin-bottom: 2rem;
@@ -130,26 +134,26 @@
             width: 100%;
             padding: 0.75rem;
             border-radius: 0.75rem;
-            background-color: #E5E7EB;
-            color: #1F2937;
+            background-color: var(--gray-light);
+            color: var(--dark-text);
             border: none;
             outline: none;
         }
         .input-field::placeholder {
-            color: #6B7280;
+            color: var(--gray-text);
         }
         .input-field:focus {
-            outline: 2px solid #DC2626;
+            outline: 2px solid var(--brand-red);
         }
         #login-btn {
             width: 100%;
             padding: 0.75rem 1rem;
-            background: linear-gradient(to right, #DC2626, #991B1B);
+            background: linear-gradient(to right, var(--brand-red), var(--brand-red-dark));
             color: #FFFFFF;
             font-size: 1.125rem;
             font-weight: 600;
             border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             cursor: pointer;
             transition: all 0.3s ease-in-out;
             border: none;
@@ -160,298 +164,253 @@
         }
         #login-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        #login-btn svg {
-            color: #FFFFFF;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        /* Home Screen */
+        /* Home Screen Layout */
         #home-screen .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            margin-top: 0.5rem;
+            margin-bottom: 2rem;
         }
-        #home-screen .header h1 {
-            font-size: 1.5rem;
+        .header-title h1 {
+            font-size: 1.75rem;
             font-weight: 700;
-            color: #DC2626;
+            color: var(--dark-text);
             margin: 0;
         }
-        #home-screen .header button {
-            color: #6B7280;
+        .header-title p {
+            margin: 0.25rem 0 0;
+            color: var(--gray-text);
+            font-size: 0.875rem;
+        }
+        .header-profile {
+            display: none;
+            align-items: center;
+            gap: 1rem;
+        }
+        .header-profile span {
+            font-weight: 500;
+        }
+        .header-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        #open-hamburger-btn {
+            color: var(--gray-text);
             cursor: pointer;
             border: none;
             background: none;
             padding: 0;
         }
 
-        .home-section {
-            margin-bottom: 2rem;
-        }
-
-        /* Quick Reports & "See All" buttons */
-        .quick-reports-header, .collapsible-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        .quick-reports-header h3, .collapsible-header h3 {
+        .home-section-title {
             font-size: 1.25rem;
             font-weight: 600;
-            color: #1F2937;
-            margin: 0;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
         }
-        .see-all-btn {
-            color: #DC2626;
-            font-size: 0.875rem;
-            border: none;
-            background: none;
-            cursor: pointer;
-            text-decoration: none;
-            transition: color 0.2s ease;
-            font-weight: 600;
-        }
-        .see-all-btn:hover {
-            color: #EF4444;
-        }
-
-        .quick-reports-scroll-container {
-            overflow-x: auto;
-            white-space: nowrap;
-            padding-bottom: 1rem;
-            margin: 0 -1.5rem;
-            padding: 0 1.5rem 1rem;
-        }
-        .quick-reports-scroll-container .inline-flex {
-            display: inline-flex;
-            gap: 0.5rem;
+        .quick-reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
         .quick-report-item {
-            width: 70px;
-            flex-shrink: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border: 1px solid var(--card-border);
+            border-radius: 0.75rem;
             text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            background-color: var(--pure-white);
         }
-        .quick-report-item div {
+        .quick-report-item:hover {
+            border-color: var(--brand-red);
+            background-color: #FEF2F2;
+            transform: translateY(-2px);
+        }
+        .quick-report-item .icon-wrapper {
             width: 48px;
             height: 48px;
-            background-color: #FECACA;
-            border-radius: 9999px;
+            background-color: #FEE2E2;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #B91C1C;
-            cursor: pointer;
+            color: var(--brand-red);
         }
         .quick-report-item span {
-            margin-top: 0.25rem;
-            font-size: 0.75rem;
-            color: #4B5563;
-            white-space: normal;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--dark-text);
         }
-        .quick-report-item:hover div {
-            background-color: #FCA5A5;
+        
+        .main-content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
         }
 
-        /* Collapsible Sections */
-        .collapsible-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        /* Main content areas with light gray background */
+        .left-pane, .right-pane {
+            background-color: var(--gray-bg);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+        }
+
+        .home-notification-card {
+            background-color: var(--pure-white);
+            padding: 1rem;
+            border: 1px solid var(--card-border);
+            border-radius: 0.75rem;
             margin-bottom: 1rem;
             cursor: pointer;
-            width: 100%;
-        }
-        .collapsible-header .title-group {
+            transition: all 0.2s ease-in-out;
             display: flex;
             align-items: center;
-            flex-grow: 1;
-        }
-        .collapsible-header h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #1F2937;
-            margin: 0;
-            margin-right: 0.5rem;
-        }
-        .collapsible-header .collapsible-arrow {
-            width: 0;
-            height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 8px solid #DC2626;
-            transition: transform 0.3s ease-in-out;
-            flex-shrink: 0;
-        }
-        .collapsible-header .collapsible-arrow.rotate-180 {
-            transform: rotate(180deg);
-        }
-        .section-content {
-            overflow: hidden;
-            transition: max-height 0.3s ease-in-out;
-        }
-        .section-content.hidden {
-            max-height: 0;
-            visibility: hidden;
-        }
-
-        /* Home Notifications (Recent Insights) */
-        .home-notification-card {
-            background-color: #E5E7EB;
-            padding: 1rem;
-            border-radius: 0.75rem;
-            margin-bottom: 0.75rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
+            gap: 1rem;
         }
         .home-notification-card:hover {
-            background-color: #D1D5DB;
-        }
-        .home-notification-card .home-notification-icon {
-            flex-shrink: 0;
-            color: #DC2626;
+            border-color: var(--brand-red);
+            background-color: #FEF2F2;
         }
         .home-notification-card .home-notification-content {
             flex-grow: 1;
         }
         .home-notification-card .home-notification-title {
             font-weight: 600;
-            color: #1F2937;
-            font-size: 0.875rem;
-            line-height: 1.25rem;
+            color: var(--dark-text);
+            font-size: 1rem;
         }
         .home-notification-card .home-notification-text {
-            color: #6B7280;
-            font-size: 0.75rem;
-            line-height: 1rem;
+            color: var(--gray-text);
+            font-size: 0.875rem;
             margin-top: 0.25rem;
         }
-        .home-notification-card .home-notification-time {
-            font-size: 0.625rem;
-            color: #9CA3AF;
-            text-align: right;
+        .notification-icon {
+            color: var(--brand-red);
+            width: 20px; /* Smaller icon for mobile */
+            height: 20px;
             flex-shrink: 0;
-            margin-top: 0.1rem;
+        }
+        @media (min-width: 1024px) {
+            .notification-icon {
+                width: 24px; /* Larger icon for desktop */
+                height: 24px;
+            }
         }
 
-        /* Queries to Know Cards */
-        #queries-to-know-container > div {
-            background-color: #E5E7EB;
+        .queries-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        .query-card {
+            background-color: var(--pure-white);
             padding: 1rem;
             border-radius: 0.75rem;
+            border: 1px solid var(--card-border);
             display: flex;
             align-items: center;
             gap: 0.75rem;
             cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
+            transition: all 0.2s ease-in-out;
         }
-        #queries-to-know-container > div:hover {
-            background-color: #D1D5DB;
+        .query-card:hover {
+            border-color: var(--brand-red);
+            background-color: #FEF2F2;
         }
-        #queries-to-know-container > div svg {
-            color: #DC2626;
+        .query-card svg {
+            color: var(--brand-red);
         }
-        #queries-to-know-container > div p {
-            color: #A3A3A3;
+        .query-card p {
+            color: var(--dark-text);
             font-size: 0.875rem;
             margin: 0;
-        }
-        .card-disabled {
-            pointer-events: none;
-            opacity: 0.5;
-        }
-        .card-disabled p {
-            color: #6B7280;
-        }
-        .card-disabled svg {
-            color: #9CA3AF;
+            font-weight: 500;
         }
 
-        /* Report Screens */
+        /* Report Screens & Sidebars */
         .report-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #F3F4F6;
-            transform: translateY(100%);
-            transition: transform 0.4s ease-out;
             z-index: 2000;
-            padding: 1.5rem;
-            box-sizing: border-box;
-            display: none;
-            flex-direction: column;
-        }
-        .report-screen.is-active {
-            transform: translateY(0%);
-            display: flex;
         }
         .report-screen .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
+            padding: 1.5rem 1.5rem 0;
         }
-        .report-screen .header button {
-            color: #6B7280;
-            font-size: 1.125rem;
-            border: none;
-            background: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-        .report-screen .header button:hover {
-            color: #1F2937;
-        }
-        .report-screen .header h2 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #DC2626;
-            margin: 0;
-        }
+      .report-back-btn {
+    color: var(--brand-red);
+    font-size: 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease-in-out;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+}
 
+.report-screen .header button.report-back-btn:hover {
+    color: var(--brand-red-dark);
+    background-color: rgba(220, 38, 38, 0.08);
+}
+
+.report-screen .header button.report-back-btn:active {
+    background-color: rgba(220, 38, 38, 0.15);
+}
+        .report-screen .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem 1.5rem 0;
+}
+
+.report-screen .header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--brand-red);
+    margin: 0 auto;
+    text-align: center;
+    padding-right: 2rem; /* Offset for the back button */
+}
         .report-content {
             flex-grow: 1;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            padding: 0 1.5rem 1.5rem;
         }
         .report-content-card {
-            background-color: #E5E7EB;
+            background-color: var(--pure-white);
             padding: 1.25rem;
             border-radius: 0.75rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            color: #1F2937;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            color: var(--dark-text);
         }
         .report-section-title {
             font-size: 1.125rem;
             font-weight: 600;
-            color: #DC2626;
+            color: var(--brand-red);
             margin-bottom: 0.5rem;
             padding-bottom: 0.25rem;
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }
-        .report-section-title svg {
-            color: #DC2626;
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
         }
         .report-list {
             list-style: none;
@@ -466,7 +425,7 @@
             color: #4B5563;
         }
         .report-list li strong {
-            color: #1F2937;
+            color: var(--dark-text);
             font-weight: 700;
         }
         .report-sub-item {
@@ -476,41 +435,22 @@
             color: #6B7280;
             line-height: 1.125rem;
         }
-        .report-link {
-            display: block;
-            margin-top: 1.5rem;
-            text-align: center;
-            color: #DC2626;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: underline;
-            transition: color 0.2s ease;
-        }
-        .report-link:hover {
-            color: #EF4444;
-        }
 
-        /* Sidebar & Notification styling */
         .sidebar {
-            position: absolute;
+            position: fixed;
             top: 0;
             right: 0;
             width: 100%;
+            max-width: 400px;
             height: 100%;
-            background-color: #F3F4F6;
             transform: translateX(100%);
             transition: transform 0.5s ease-out;
-            z-index: 1000;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            z-index: 3000;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
-        }
-        @media (min-width: 768px) {
-            .sidebar {
-                width: 70%;
-            }
         }
         .sidebar.is-open {
             transform: translateX(0%);
@@ -520,11 +460,12 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
+            padding: 0;
         }
         .sidebar .header h2 {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #1F2937;
+            color: var(--dark-text);
             margin: 0;
         }
         .sidebar .header button {
@@ -535,111 +476,413 @@
             cursor: pointer;
             line-height: 1;
             padding: 0;
-            margin-right: -0.5rem;
-        }
-        .sidebar .header button:hover {
-            color: #1F2937;
         }
 
-        /* Sidebar Content Styling */
-        .sidebar-menu-item, .notification-item {
-            background-color: #E5E7EB;
-            padding: 1rem;
-            border-radius: 0.5rem;
+        .sidebar-menu-item,
+        .sidebar-card { /* Unified styling for sidebar items */
+            background-color: var(--pure-white);
+            border-radius: 0.75rem;
+            border: 1px solid var(--card-border);
+            padding: 1.25rem;
             margin-bottom: 0.75rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slide-in-fade 0.5s ease-out forwards;
+            transition: all 0.2s ease-in-out;
             cursor: pointer;
-            font-weight: 600;
-        }
-        .sidebar-menu-item:hover, .notification-item:hover {
-            background-color: #D1D5DB;
-        }
-        .sidebar-menu-item:last-child, .notification-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .sidebar-menu-item p {
-            color: #1F2937;
-        }
-        .notification-item p:first-child {
-            font-size: 1.125rem;
-            margin-bottom: 0.25rem;
-            color: #1F2937;
-        }
-        .notification-item p:last-child {
-            font-size: 0.875rem;
-            color: #4B5563;
-        }
-        @keyframes slide-in-fade {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        .sidebar.is-open .sidebar-menu-item:nth-child(1) { animation-delay: 0.1s; }
-        .sidebar.is-open .sidebar-menu-item:nth-child(2) { animation-delay: 0.2s; }
-        .sidebar.is-open .notification-item:nth-child(1) { animation-delay: 0.1s; }
-        .sidebar.is-open .notification-item:nth-child(2) { animation-delay: 0.2s; }
-        .sidebar.is-open .notification-item:nth-child(3) { animation-delay: 0.3s; }
-        .sidebar.is-open .notification-item:nth-child(4) { animation-delay: 0.4s; }
-
-        /* Help/Feedback Section */
-        #feedback-section-container {
-            display: none;
-            flex-direction: column;
-            padding: 1rem 0;
-        }
-        #feedback-section-container.active {
             display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .sidebar-menu-item:hover,
+        .sidebar-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Redesigned Feedback Section */
+        .feedback-section {
+            background-color: var(--gray-bg);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            border: 1px solid var(--card-border);
         }
         .feedback-section h3 {
-            font-size: 1.25rem;
+            margin: 0;
             font-weight: 600;
-            color: #6B7280;
-            margin: 0 0 0.5rem;
+            font-size: 1.125rem;
+            color: var(--dark-text);
         }
         .feedback-textarea {
             width: 100%;
-            min-height: 100px;
+            height: 120px;
             padding: 0.75rem;
             border-radius: 0.75rem;
-            background-color: #FFFFFF;
-            color: #000000;
-            border: none;
-            outline: none;
-            resize: vertical;
-            font-family: 'Inter', sans-serif;
-            margin-bottom: 1rem;
-        }
-        .feedback-textarea::placeholder {
-            color: #6B7280;
-        }
-        .feedback-textarea:focus {
-            outline: 2px solid #DC2626;
+            border: 1px solid var(--gray-light);
+            background-color: var(--pure-white);
+            resize: none;
+            font-family: inherit;
         }
         .feedback-submit-btn {
-            background: linear-gradient(to right, #DC2626, #991B1B);
-            color: #FFFFFF;
-            font-size: 1rem;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            background-color: var(--brand-red);
+            color: var(--pure-white);
             border: none;
             cursor: pointer;
-            transition: transform 0.2s ease-in-out;
-            align-self: flex-end;
+            font-weight: 600;
+            transition: background-color 0.2s;
         }
         .feedback-submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: var(--brand-red-dark);
         }
-    </style>
+        #feedback-section-container .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+        .notification-card { /* Style for notifications inside the sidebar */
+            background-color: var(--pure-white);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease-in-out;
+        }
+        .notification-card:hover {
+            border-color: var(--brand-red);
+            background-color: #FEF2F2;
+        }
+        .notification-card .notification-content {
+            flex-grow: 1;
+        }
+        .notification-card .notification-title {
+            font-weight: 600;
+            color: var(--dark-text);
+            font-size: 1rem;
+            margin: 0;
+        }
+        .notification-card .notification-text {
+            color: var(--gray-text);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Custom Alert & AI Styles */
+        .custom-alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .custom-alert-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .custom-alert-box {
+            background-color: var(--pure-white);
+            padding: 1.5rem 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 80%;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .custom-alert-overlay.visible .custom-alert-box {
+            transform: scale(1);
+        }
+        #custom-alert-message {
+            margin: 0 0 1rem;
+            color: var(--dark-text);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        #custom-alert-close-btn {
+            background: linear-gradient(to right, var(--brand-red), var(--brand-red-dark));
+            color: #FFFFFF;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        #generate-summary-btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(to right, #4F46E5, #818CF8);
+            color: #FFFFFF;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2), 0 2px 4px -1px rgba(79, 70, 229, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid var(--brand-red);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+            display: none;
+        }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        #ai-summary-content p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        #ai-summary-content h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--brand-red);
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        :root {
+    --brand-red: #DC2626;
+    --brand-red-dark: #991B1B;
+    --gray-bg: #F3F4F6;
+    --gray-light: #E5E7EB;
+    --gray-text: #6B7280;
+    --dark-text: #1F2937;
+    --card-border: #E5E7EB;
+    --pure-white: #FFFFFF;
+}
+
+#feedback-section-container {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    padding: 0 1.5rem 1.5rem;
+}
+
+.feedback-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem 0 0;
+}
+
+.feedback-back-btn {
+    color: var(--brand-red);
+    font-size: 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease-in-out;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+}
+
+.feedback-back-btn:hover {
+    color: var(--brand-red-dark);
+    background-color: rgba(220, 38, 38, 0.08);
+}
+
+.feedback-back-btn:active {
+    background-color: rgba(220, 38, 38, 0.15);
+}
+
+.feedback-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--brand-red);
+    margin: 0 auto;
+    text-align: center;
+    padding-right: 2rem;
+}
+
+.feedback-content-card {
+    background-color: var(--pure-white);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-grow: 1;
+}
+
+.feedback-textarea {
+    width: 100%;
+    height: 120px;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--gray-light);
+    background-color: var(--gray-bg);
+    resize: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.feedback-submit-btn {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background-color: var(--brand-red);
+    color: var(--pure-white);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.feedback-submit-btn:hover {
+    background-color: var(--brand-red-dark);
+}
+
+        /* PC View / Responsive Adjustments */
+        @media (min-width: 1024px) {
+            body {
+                background-color: var(--pure-white);
+            }
+            .app-container {
+                max-width: 100%;
+                border-radius: 0;
+                height: 100vh;
+            }
+            #home-screen {
+                padding: 2.5rem;
+            }
+            .header-profile {
+                display: flex;
+            }
+            #open-hamburger-btn {
+                display: none;
+            }
+            .main-content-grid {
+                grid-template-columns: 2fr 1fr;
+            }
+            .queries-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .app-container {
+                max-width: 100%;
+                border-radius: 0;
+            }
+            .header-profile {
+                display: flex;
+            }
+            #open-hamburger-btn {
+                display: none;
+            }
+        }
+
+         /* Notification Card Styling - UPDATED FOR MOBILE */
+        .home-notification-card {
+            background-color: var(--pure-white);
+            padding: 0.75rem; /* Reduced padding for mobile */
+            border: 1px solid var(--card-border);
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: flex-start; /* Changed to flex-start for better alignment */
+            gap: 0.75rem; /* Reduced gap for mobile */
+        }
+        .home-notification-card:hover {
+            border-color: var(--brand-red);
+            background-color: #FEF2F2;
+        }
+        .home-notification-card .home-notification-content {
+            flex-grow: 1;
+        }
+        .home-notification-card .home-notification-title {
+            font-weight: 600;
+            color: var(--dark-text);
+            font-size: 0.95rem; /* Slightly smaller font for mobile */
+            margin-bottom: 0.25rem;
+        }
+        .home-notification-card .home-notification-text {
+            color: var(--gray-text);
+            font-size: 0.8rem; /* Slightly smaller font for mobile */
+            line-height: 1.4;
+        }
+        .notification-icon {
+            color: var(--brand-red);
+            width: 16px; /* Smaller icon for mobile */
+            height: 16px;
+            flex-shrink: 0;
+            margin-top: 0.25rem; /* Added slight top margin for better alignment */
+        }
+
+        /* Desktop view adjustments */
+        @media (min-width: 1024px) {
+            .home-notification-card {
+                padding: 1rem; /* Restore original padding for desktop */
+                gap: 1rem; /* Restore original gap for desktop */
+            }
+            .home-notification-card .home-notification-title {
+                font-size: 1rem; /* Restore original font size for desktop */
+            }
+            .home-notification-card .home-notification-text {
+                font-size: 0.875rem; /* Restore original font size for desktop */
+            }
+            .notification-icon {
+                width: 20px; /* Slightly larger icon for desktop */
+                height: 20px;
+                margin-top: 0; /* Remove top margin for desktop */
+            }
+        }
+
+        /* Add this inside the <style> tag */
+@media (max-width: 1023px) {
+    .quick-reports-grid {
+        overflow-x: auto;
+        white-space: nowrap;
+        grid-template-columns: none;
+        display: flex;
+        -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+    }
+    .quick-reports-grid .quick-report-item {
+        flex-shrink: 0;
+        width: 100px;
+        display: inline-flex;
+    }
+}
+     </style>
 </head>
 <body>
     <div class="app-container">
-
-        <div id="welcome-screen" class="screen flex">
+        <div id="welcome-screen" class="screen active">
             <div class="welcome-header">
                 <img src="IFB logo.png" alt="Logo" style="width: 70px; height: 50px; object-fit: contain;">
                 <h2>
@@ -661,133 +904,67 @@
             </div>
         </div>
 
-        <div id="home-screen" class="screen hidden">
+        <div id="home-screen" class="screen inactive">
             <div class="header">
-                <h1>Hi, Kota</h1>
+                <div class="header-title">
+                    <h1>Hi, Kota</h1>
+                    
+                </div>
+                
                 <button id="open-hamburger-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
             </div>
 
             <div class="home-section">
-                <div class="quick-reports-header">
-                    <h3>Quick Reports</h3>
-                </div>
-                <div class="quick-reports-scroll-container">
-                    <div class="inline-flex">
-                        <div class="quick-report-item">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18.7 8.3L12 15l-3.3-3.3L3 18"></path></svg>
-                            </div>
-                            <span>Pr YTD</span>
-                        </div>
-                        <div class="quick-report-item">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="10" y2="9"></line></svg>
-                            </div>
-                            <span>Pr QTD</span>
-                        </div>
-                        <div class="quick-report-item">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6"></path><path d="M6 20v-2"></path><path d="M18 20v-4"></path><path d="M12 14a4 4 0 0 1 0-8V2"></path><path d="M6 18a4 4 0 0 1 0-8V2"></path><path d="M18 16a4 4 0 0 1 0-8V2"></path></svg>
-                            </div>
-                            <span>Pr MTD</span>
-                        </div>
-                        <div class="quick-report-item">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                            </div>
-                            <span>Sc YTD</span>
-                        </div>
-                        <div class="quick-report-item">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                            </div>
-                            <span>Sc QTD</span>
-                        </div>
-                        <div class="quick-report-item">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                            </div>
-                            <span>Sc MTD</span>
-                        </div>
-                        <div class="quick-report-item">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                            </div>
-                            <span>Critical Outlets</span>
-                        </div>
-                        <div class="quick-report-item">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
-                            </div>
-                            <span>Pending Visits</span>
-                        </div>
-                        <div class="quick-report-item">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 12 18 2"></polygon></svg>
-                            </div>
-                            <span>CSR with Zero Sales</span>
-                        </div>
-                        <div class="quick-report-item">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                            </div>
-                            <span>CR with Zero Sales</span>
-                        </div>
-                        <div class="quick-report-item">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2l4-4"></path></svg>
-                            </div>
-                            <span>CSR > 10 unit Sales</span>
-                        </div>
-                    </div>
+                <h3 class="home-section-title">Quick Reports</h3>
+                <div class="quick-reports-grid">
+                    <div class="quick-report-item" data-target-screen="daily-sales-report-screen"><div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18.7 8.3L12 15l-3.3-3.3L3 18"></path></svg></div><span>Pr YTD</span></div>
+                    <div class="quick-report-item" data-target-screen="daily-sales-report-screen"><div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div><span>Pr QTD</span></div>
+                    <div class="quick-report-item" data-target-screen="daily-sales-report-screen"><div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6"></path><path d="M6 20v-2"></path><path d="M18 20v-4"></path></svg></div><span>Pr MTD</span></div>
+                    <div class="quick-report-item" data-target-screen="daily-sales-report-screen"><div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><span>Sc YTD</span></div>
+                    <div class="quick-report-item" data-target-screen="daily-sales-report-screen"><div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></div><span>Sc QTD</span></div>
+                    <div class="quick-report-item" data-target-screen="daily-sales-report-screen"><div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg></div><span>Sc MTD</span></div>
+                    <div class="quick-report-item" data-target-screen="daily-visit-performance-screen"><div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div><span>Critical Outlets</span></div>
+                    <div class="quick-report-item" data-target-screen="daily-visit-performance-screen"><div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg></div><span>Pending Visits</span></div>
+                    <div class="quick-report-item" data-target-screen="csr-cr-performance-screen"><div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 12 18 2"></polygon></svg></div><span>CSR Zero Sales</span></div>
+                    <div class="quick-report-item" data-target-screen="csr-cr-performance-screen"><div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div><span>CR Zero Sales</span></div>
+                    <div class="quick-report-item" data-target-screen="csr-cr-performance-screen"><div class="icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2l4-4"></path></svg></div><span>CSR > 10 Units</span></div>
                 </div>
             </div>
 
-            <div class="home-section" style="margin-top: -2rem;">
-                <div id="recent-insights-header" class="collapsible-header">
-                    <div class="title-group">
-                        <h3>Recent Insights</h3>
-                        <div class="collapsible-arrow"></div>
-                    </div>
-                    <button class="see-all-btn" id="notification-card-see-all">See all</button>
+            <div class="main-content-grid">
+                <div class="left-pane">
+                    <h3 class="home-section-title">Recent Insights</h3>
+                    <div id="recent-notifications-container"></div>
                 </div>
-                <div id="recent-notifications-container" class="section-content">
-                </div>
-            </div>
-
-            <div class="home-section">
-                <div id="queries-to-know-header" class="collapsible-header">
-                    <div class="title-group">
-                        <h3>Queries to Know</h3>
-                        <div class="collapsible-arrow"></div>
-                    </div>
-                </div>
-                <div id="queries-to-know-container" class="section-content" style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    <div id="sales-plan-achievement-card" class="query-card">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
-                        <p>What is my sales plan achievement?</p>
-                    </div>
-                    <div id="critical-outlets-card" class="query-card">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle><line x1="12" y1="18" x2="12" y2="18"></line><line x1="12" y1="15" x2="12" y2="12"></line></svg>
-                        <p>Show me critical outlets to visit.</p>
-                    </div>
-                    <div id="top-employees-card" class="query-card">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
-                        <p>Who are the top 3 CSR employees?</p>
-                    </div>
-                    <div id="visit-adherence-card" class="query-card">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2l4-4"></path></svg>
-                        <p>What is my visit adherence?</p>
+                <div class="right-pane">
+                    <h3 class="home-section-title">Queries to Know</h3>
+                    <div id="queries-to-know-container" class="queries-grid">
+                        <div class="query-card" data-query-type="sales-plan-achievement">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                            <p>What is my sales plan achievement?</p>
+                        </div>
+                        <div class="query-card" data-query-type="critical-outlets">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            <p>Show me critical outlets to visit.</p>
+                        </div>
+                        <div class="query-card" data-query-type="top-employees">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                            <p>Who are the top 3 CSR employees?</p>
+                        </div>
+                        <div class="query-card" data-query-type="visit-adherence">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2l4-4"></path></svg>
+                            <p>What is my visit adherence?</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="daily-visit-performance-screen" class="report-screen">
+        <div id="daily-visit-performance-screen" class="screen inactive">
             <div class="header">
-                <button class="report-back-btn">
+                <button class="report-back-btn" data-target-screen="home-screen">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                     <span>Back</span>
                 </button>
@@ -795,10 +972,7 @@
             </div>
             <div class="report-content">
                 <div class="report-content-card">
-                    <h3 class="report-section-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        Visit Metrics:
-                    </h3>
+                    <h3 class="report-section-title">Visit Metrics:</h3>
                     <ul class="report-list">
                         <li>Total Outlets: <strong>34</strong></li>
                         <li>Total Visits Completed: <strong>18</strong></li>
@@ -807,40 +981,18 @@
                     </ul>
                 </div>
                 <div class="report-content-card">
-                    <h3 class="report-section-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                        Critical Outlets in Visit Plan:
-                    </h3>
+                    <h3 class="report-section-title">Critical Outlets in Visit Plan:</h3>
                     <ul class="report-list">
-                        <li>
-                            <span class="report-item">a. Dealer Name :</span> James & Co (1000221)<br>
-                            <span class="report-sub-item">Target: <strong>141.0</strong> | Achieved: <strong>4.96</strong></span>
-                        </li>
-                        <li>
-                            <span class="report-item">b. Dealer Name :</span> DARLING JAMES ELECTRONICS (1032298)<br>
-                            <span class="report-sub-item">Target: <strong>94.0</strong> | Achieved: <strong>71.28</strong></span>
-                        </li>
-                        <li>
-                            <span class="report-item">c. Dealer Name :</span> VASANTH & CO (7012168)<br>
-                            <span class="report-sub-item">Target: <strong>34.0</strong> | Achieved: <strong>64.71</strong></span>
-                        </li>
-                        <li>
-                            <span class="report-item">d. Dealer Name :</span> Sacs (1000327)<br>
-                            <span class="report-sub-item">Target: <strong>28.0</strong> | Achieved: <strong>39.29</strong></span>
-                        </li>
-                        <li>
-                            <span class="report-item">e. Dealer Name :</span> James Retail Private Limited (7006234)<br>
-                            <span class="report-sub-item">Target: <strong>27.0</strong> | Achieved: <strong>29.63</strong></span>
-                        </li>
+                        <li><span class="report-item">a. Dealer Name :</span> James & Co (1000221)<br><span class="report-sub-item">Target: <strong>141.0</strong> | Achieved: <strong>4.96</strong></span></li>
+                        <li><span class="report-item">b. Dealer Name :</span> DARLING JAMES ELECTRONICS (1032298)<br><span class="report-sub-item">Target: <strong>94.0</strong> | Achieved: <strong>71.28</strong></span></li>
                     </ul>
                 </div>
-                <a href="#" class="report-link">Click to view detailed report</a>
             </div>
         </div>
 
-        <div id="daily-sales-report-screen" class="report-screen">
+        <div id="daily-sales-report-screen" class="screen inactive">
             <div class="header">
-                <button class="report-back-btn">
+                <button class="report-back-btn" data-target-screen="home-screen">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                     <span>Back</span>
                 </button>
@@ -848,148 +1000,62 @@
             </div>
             <div class="report-content">
                 <div class="report-content-card">
-                    <h3 class="report-section-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                        Sales Plan Achievement:
-                    </h3>
-                    <p class="report-item">Target: <strong>584.0</strong> / Actual: <strong>163.0</strong></p>
-                    <p class="report-item">Outlets Planned vs Billed: <strong>43 vs 25</strong></p>
+                    <h3 class="report-section-title">Sales Plan Achievement:</h3>
+                    <p>Target: <strong>584.0</strong> / Actual: <strong>163.0</strong></p>
+                    <p>Outlets Planned vs Billed: <strong>43 vs 25</strong></p>
                 </div>
                 <div class="report-content-card">
-                    <h3 class="report-section-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
-                        Category wise Target vs Actual:
-                    </h3>
+                    <h3 class="report-section-title">Category wise Target vs Actual:</h3>
                     <ul class="report-list">
                         <li>AC: <strong>4.0/5.0</strong></li>
                         <li>CD: <strong>0.0/1.0</strong></li>
-                        <li>DW: <strong>13.0/2.0</strong></li>
                         <li>FL: <strong>212.0/57.0</strong></li>
-                        <li>KA: <strong>1.0/0.0</strong></li>
-                        <li>MW: <strong>68.0/17.0</strong></li>
-                        <li>REF-DC: <strong>95.0/4.0</strong></li>
-                        <li>REF-FF: <strong>9.0/1.0</strong></li>
-                        <li>TL: <strong>182.0/76.0</strong></li>
-                        <li>WD: <strong>0.0/0.0</strong></li>
                     </ul>
                 </div>
-                <div class="report-content-card">
-                    <h3 class="report-section-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        Bottom 3 Dealers:
-                    </h3>
-                    <ul class="report-list">
-                        <li>
-                            <span class="report-item">a. Dealer Name :</span> James Retail Private Limited (1017685)<br>
-                            <span class="report-sub-item">Target: <strong>74.0</strong> | Actual: <strong>0.0</strong></span>
-                        </li>
-                        <li>
-                            <span class="report-item">b. Dealer Name :</span> DARLING JAMES ELECTRONICS (1032298)<br>
-                            <span class="report-sub-item">Target: <strong>67.0</strong> | Actual: <strong>0.0</strong></span>
-                        </li>
-                        <li>
-                            <span class="report-item">c. Dealer Name :</span> James Retail Private Limited (7006234)<br>
-                            <span class="report-sub-item">Target: <strong>19.0</strong> | Actual: <strong>0.0</strong></span>
-                        </li>
-                    </ul>
-                </div>
-                <a href="#" class="report-link">Click to view detailed report</a>
             </div>
         </div>
 
-        <div id="csr-cr-performance-screen" class="report-screen">
+        <div id="csr-cr-performance-screen" class="screen inactive">
             <div class="header">
-                <button class="report-back-btn">
+                <button class="report-back-btn" data-target-screen="home-screen">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                     <span>Back</span>
                 </button>
-                <h2>CSR/CR Performance MTD</h2>
+                <h2>CSR/CR Performance</h2>
             </div>
             <div class="report-content">
                 <div class="report-content-card">
-                    <h3 class="report-section-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        Performance Summary:
-                    </h3>
+                    <h3 class="report-section-title">Top 3 CSR Employees:</h3>
                     <ul class="report-list">
-                        <li>CSR with zero sales: <strong>3</strong></li>
-                        <li>CR with zero sales: <strong>0</strong></li>
+                        <li><span class="report-item">a. Employee:</span> IFBGCL660204 - RAMESHKANNA<br><span class="report-sub-item">Target: <strong>21.0</strong> | Sales: <strong>19.0</strong></span></li>
+                        <li><span class="report-item">b. Employee:</span> IFBAPPL09841 - JEEVAN<br><span class="report-sub-item">Target: <strong>30.0</strong> | Sales: <strong>22.0</strong></span></li>
                     </ul>
                 </div>
-                <div class="report-content-card">
-                    <h3 class="report-section-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
-                        Top 3 CSR Employees:
-                    </h3>
-                    <ul class="report-list">
-                        <li>
-                            <span class="report-item">a. Employee:</span> IFBGCL660204 - RAMESHKANNA<br>
-                            <span class="report-sub-item">Target: <strong>21.0</strong> | Sales: <strong>19.0</strong></span>
-                        </li>
-                        <li>
-                            <span class="report-item">b. Employee:</span> IFBGCL661205 - VASUDEVAN S<br>
-                            <span class="report-sub-item">Target: <strong>10.0</strong> | Sales: <strong>8.0</strong></span>
-                        </li>
-                        <li>
-                            <span class="report-item">c. Employee:</span> IFBAPPL09841 - JEEVAN<br>
-                            <span class="report-sub-item">Target: <strong>30.0</strong> | Sales: <strong>22.0</strong></span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="report-content-card">
-                    <h3 class="report-section-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        Bottom 3 CSR Employees:
-                    </h3>
-                    <ul class="report-list">
-                        <li>
-                            <span class="report-item">a. Employee:</span> IFBGCL666096 - BALAJI G G<br>
-                            <span class="report-sub-item">Target: <strong>0.0</strong> | Sales: <strong>9.0</strong></span>
-                        </li>
-                        <li>
-                            <span class="report-item">b. Employee:</span> IFBGCL662632 - KARTHIKEYAN<br>
-                            <span class="report-sub-item">Target: <strong>17.0</strong> | Sales: <strong>0.0</strong></span>
-                        </li>
-                        <li>
-                            <span class="report-item">c. Employee:</span> IFBGCL660984 - ROHINI MUTHUKRISHNAN<br>
-                            <span class="report-sub-item">Target: <strong>14.0</strong> | Sales: <strong>0.0</strong></span>
-                        </li>
-                    </ul>
-                </div>
-                <a href="#" class="report-link">Click to view detailed report</a>
             </div>
         </div>
 
-        <div id="summary-screen" class="report-screen">
+        <div id="summary-screen" class="screen inactive">
             <div class="header">
-                <button class="report-back-btn">
+                <button class="report-back-btn" data-target-screen="home-screen">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                     <span>Back</span>
                 </button>
                 <h2>Today's Summary</h2>
             </div>
             <div class="report-content">
-                <div class="report-content-card">
-                    <h3 class="report-section-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
-                        Critical Areas:
-                    </h3>
-                    <p>The outlet "James Retail Private Limited" has seen a big drop in recent secondary sales activity over the last 2 months, with <strong>39 fewer items sold</strong> and <strong>20 fewer bills generated</strong> than usual. Additionally, there have been longer gaps between orders, which needs immediate attention to restore its performance.</p>
-                    <p style="margin-top: 1rem;">The primary sales achievement for categories like <strong>MW, KA, and REF-DC</strong> is significantly behind target by <strong>100%, 100%, and 96.61%</strong>, respectively. These gaps require focused efforts to improve sales in these categories.</p>
-                </div>
-                <div class="report-content-card">
-                    <h3 class="report-section-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"></path><path d="M15.5 8.5L12 12l-3.5-3.5"></path><path d="M12 12l3.5 3.5-3.5 3.5"></path></svg>
-                        Positive Area:
-                    </h3>
-                    <p>Your visit adherence is excellent at <strong>94.44%</strong>, with minimal unplanned visits at just <strong>2.94%</strong>. This shows strong planning and execution in your outlet visits.</p>
+                <button id="generate-summary-btn">
+                    ✨ Generate AI Summary
+                </button>
+                <div id="ai-summary-loader" class="loader"></div>
+                <div id="ai-summary-content">
+                    <p>Click the button above to generate a personalized summary of your performance with actionable insights.</p>
                 </div>
             </div>
         </div>
 
-        <div id="query-popup-screen" class="report-screen">
+        <div id="query-popup-screen" class="screen inactive">
             <div class="header">
-                <button class="report-back-btn">
+                <button class="report-back-btn" data-target-screen="home-screen">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                     <span>Back</span>
                 </button>
@@ -1019,314 +1085,248 @@
                     <p>Help</p>
                 </div>
             </div>
-            <div id="feedback-section-container">
-                <div class="feedback-section">
-                    <h3>Feedback</h3>
-                    <textarea id="feedback-textarea" class="feedback-textarea" placeholder="Type your feedback here..."></textarea>
-                    <button id="submit-feedback-btn" class="feedback-submit-btn">Submit</button>
-                </div>
-            </div>
-        </div>
+          <div id="feedback-section-container">
+    <div class="feedback-header">
+        <button id="back-to-menu-btn" class="feedback-back-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back</span>
+        </button>
+        <h2 class="feedback-title">Feedback</h2>
+    </div>
+    <div class="feedback-content-card">
+        <textarea id="feedback-textarea" class="feedback-textarea" placeholder="Type your feedback here..."></textarea>
+        <button id="submit-feedback-btn" class="feedback-submit-btn">Submit</button>
+    </div>
+</div>
+                       </div>
+                      </div>
 
         <div id="notification-sidebar" class="sidebar">
             <div class="header">
                 <h2>Notifications</h2>
                 <button id="close-notifications-btn">&times;</button>
             </div>
-            <div id="notification-list">
+            <div id="notification-list"></div>
+        </div>
+
+        <div id="custom-alert-overlay" class="custom-alert-overlay">
+            <div class="custom-alert-box">
+                <p id="custom-alert-message"></p>
+                <button id="custom-alert-close-btn">OK</button>
             </div>
         </div>
+
     </div>
 
     <script>
-        // Get references to screen elements
+        
+        
+        
+        const API_KEY = "";
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
+
+        // --- Element Selectors ---
         const welcomeScreen = document.getElementById('welcome-screen');
         const homeScreen = document.getElementById('home-screen');
-        const dailySalesScreen = document.getElementById('daily-sales-report-screen');
-        const dailyVisitScreen = document.getElementById('daily-visit-performance-screen');
-        const csrCrScreen = document.getElementById('csr-cr-performance-screen');
         const summaryScreen = document.getElementById('summary-screen');
         const queryPopupScreen = document.getElementById('query-popup-screen');
-
-        // Get references to buttons/cards
-        const loginBtn = document.getElementById('login-btn');
-        const employeeIdInput = document.getElementById('employee-id-input');
-        const passwordInput = document.getElementById('password-input');
-
-        // Get references for sidebars and their elements
         const hamburgerSidebar = document.getElementById('hamburger-sidebar');
         const notificationSidebar = document.getElementById('notification-sidebar');
-        const openHamburgerBtn = document.getElementById('open-hamburger-btn');
-        const closeHamburgerBtn = document.getElementById('close-hamburger-btn');
-        const closeNotificationsBtn = document.getElementById('close-notifications-btn');
-        const notificationsMenuBtn = document.getElementById('notifications-menu-btn');
-        const helpMenuBtn = document.getElementById('help-menu-btn');
-        const notificationCardSeeAll = document.getElementById('notification-card-see-all');
-        const feedbackSectionContainer = document.getElementById('feedback-section-container');
-        const hamburgerMenuList = document.getElementById('hamburger-menu-list');
-        const submitFeedbackBtn = document.getElementById('submit-feedback-btn');
-
-        // Collapsible elements
-        const recentInsightsHeader = document.getElementById('recent-insights-header');
-        const queriesToKnowHeader = document.getElementById('queries-to-know-header');
-        const queriesToKnowContainer = document.getElementById('queries-to-know-container');
+        const customAlertOverlay = document.getElementById('custom-alert-overlay');
+        const customAlertMessage = document.getElementById('custom-alert-message');
         const recentNotificationsContainer = document.getElementById('recent-notifications-container');
+        const allScreens = document.querySelectorAll('.screen');
+        const hamburgerMenuList = document.getElementById('hamburger-menu-list');
+        const feedbackSectionContainer = document.getElementById('feedback-section-container');
+        const notificationListContainer = document.getElementById('notification-list');
 
-        // Get new elements for the query pop-up
-        const queryPopupTitle = document.getElementById('query-popup-title');
-        const queryPopupIconContainer = document.getElementById('query-popup-icon-container');
-        const queryPopupCardTitle = document.getElementById('query-popup-card-title');
-        const queryPopupContent = document.getElementById('query-popup-content');
-
-        // Get Query to Know Cards
-        const queryCards = document.querySelectorAll('#queries-to-know-container > div');
-
-        // --- Core Fix: Simplified showScreen and back button logic ---
-        function showScreen(screenToShow) {
-            const allScreens = [welcomeScreen, homeScreen, dailySalesScreen, dailyVisitScreen, csrCrScreen, summaryScreen, queryPopupScreen];
-
-            // First, hide all screens immediately by removing all classes
-            allScreens.forEach(screen => {
-                screen.classList.remove('flex', 'is-active');
-                screen.classList.add('hidden');
-            });
-
-            // Then, show the new screen and apply transition classes
-            screenToShow.classList.remove('hidden');
-            screenToShow.classList.add('flex');
-
-            // Allow a brief moment for the browser to register the 'flex' class before adding 'is-active'
-            setTimeout(() => {
-                screenToShow.classList.add('is-active');
-            }, 10); // A very small delay is enough
-        }
-
-        // === Notification Data ===
+        // --- Data ---
         const recentInsightsData = [
-            { title: "Daily Visit Performance", text: "Your visit plan for today is 34 outlets with 18 completed visits.", time: "2:05 PM", targetScreen: dailyVisitScreen },
-            { title: "Daily Sales Performance", text: "Target: 584.0 | Actual: 163.0", time: "2:05 PM", targetScreen: dailySalesScreen },
-            { title: "CSR/CR performance MTD", text: "Top 3 CSRs are performing well, but some have zero sales.", time: "1:30 PM", targetScreen: csrCrScreen },
-            { title: "Summary for today", text: "Alpha, your GenAI assistant, has prepared your daily summary.", time: "1:00 PM", targetScreen: summaryScreen }
+            { title: "Daily Visit Performance", text: "Your visit plan for today is 34 outlets with 18 completed visits.", targetScreenId: 'daily-visit-performance-screen' },
+            { title: "Daily Sales Performance", text: "Target: 584.0 | Actual: 163.0", targetScreenId: 'daily-sales-report-screen' },
+            { title: "CSR/CR performance MTD", text: "Top 3 CSRs are performing well, but some have zero sales.", targetScreenId: 'csr-cr-performance-screen' },
+            { title: "Summary for today", text: "Alpha, your GenAI assistant, has prepared your daily summary.", targetScreenId: 'summary-screen' }
         ];
 
-        // === NEW & IMPROVED Queries to Know Data with AI-like responses ===
-        const queriesData = {
-            "sales-plan-achievement-card": {
-                title: "Sales Plan Achievement",
-                cardTitle: "Sales Performance Snapshot:",
-                iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>`,
-                content: `<p>Your MTD sales achievement is at <strong>27.9%</strong>, with <strong>163 units</strong> sold against a target of <strong>584 units</strong>. There's a clear opportunity to push sales, especially in underperforming categories.</p>`
+        const allNotificationsData = [
+            { title: "Important: New Target Set", text: "Your monthly sales target has been updated. Check the Daily Sales Report for details." },
+            { title: "Visit Reminder", text: "You have 1 pending visit for today. Don't forget to complete it to maintain 100% adherence." },
+            { title: "Product Update", text: "New marketing materials for the IFB Washing Machine Pro Series are now available." },
+            { title: "Performance Alert", text: "CSR employee 'SHIVAM' has seen a 15% drop in sales over the last week. Please provide guidance." }
+        ];
+
+        const queryData = {
+            'sales-plan-achievement': {
+                title: 'Sales Plan Achievement',
+                cardTitle: 'Your Sales Performance',
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>',
+                content: '<p><strong>Current Status:</strong> Your sales achievement is at <strong>27.9%</strong> (163 units) against a target of 584 units. There is a significant gap of 421 units. To meet your monthly goal, you need to focus on converting more outlets from your visit plan.</p><p><strong>Actionable Insight:</strong> Prioritize high-potential outlets and follow up on pending sales to bridge the gap.</p>'
             },
-            "critical-outlets-card": {
-                title: "Critical Outlets to Visit",
-                cardTitle: "Top 3 Outlets Needing Attention:",
-                iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle><line x1="12" y1="18" x2="12" y2="18"></line><line x1="12" y1="15" x2="12" y2="12"></line></svg>`,
-                content: `<p>Your priority today should be these outlets based on their sales gap:</p><ul class="report-list"><li><strong>James Retail Private Limited (1017685)</strong>: Has a gap of <strong>74 units</strong>.</li><li><strong>DARLING JAMES ELECTRONICS (1032298)</strong>: Has a gap of <strong>67 units</strong>.</li><li><strong>James Retail Private Limited (7006234)</strong>: Has a gap of <strong>19 units</strong>.</li></ul>`
+            'critical-outlets': {
+                title: 'Critical Outlets',
+                cardTitle: 'Outlets to Prioritize',
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>',
+                content: '<p>The following outlets have a high sales potential but low recent activity. Make sure to include them in your visit plan:</p><ul class="report-list"><li><strong>James & Co (1000221)</strong><br><span class="report-sub-item">Target: <strong>141.0</strong> | Achieved: <strong>4.96</strong></span></li><li><strong>DARLING JAMES ELECTRONICS (1032298)</strong><br><span class="report-sub-item">Target: <strong>94.0</strong> | Achieved: <strong>71.28</strong></span></li></ul>'
             },
-            "top-employees-card": {
-                title: "Top 3 CSR Employees",
-                cardTitle: "Highest Performing CSRs MTD:",
-                iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>`,
-                content: `<p>Here are your top performers, based on Month-to-Date sales volume:</p><ul class="report-list"><li>🥇 <strong>RAMESHKANNA</strong> (IFBGCL660204) with <strong>19 units</strong>.</li><li>🥈 <strong>JEEVAN</strong> (IFBAPPL09841) with <strong>22 units</strong>.</li><li>🥉 <strong>VASUDEVAN S</strong> (IFBGCL661205) with <strong>8 units</strong>.</li></ul>`
+            'top-employees': {
+                title: 'Top CSR Employees',
+                cardTitle: 'High-Performing CSRs',
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>',
+                content: '<p>Based on performance to date, the top three CSR employees are:</p><ul class="report-list"><li><strong>1. IFBGCL660204 - RAMESHKANNA</strong><br><span class="report-sub-item">Sales: <strong>19.0</strong> units</span></li><li><strong>2. IFBAPPL09841 - JEEVAN</strong><br><span class="report-sub-item">Sales: <strong>22.0</strong> units</span></li><li><strong>3. IFBAPPL01234 - SHIVAM</strong><br><span class="report-sub-item">Sales: <strong>15.0</strong> units</span></li></ul>'
             },
-            "visit-adherence-card": {
-                title: "Visit Adherence",
-                cardTitle: "Daily Visit Efficiency:",
-                iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2l4-4"></path></svg>`,
-                content: `<p>Great work! Your visit adherence today is <strong>94.44%</strong>. This high rate shows you are effectively following your planned route and maximizing your time in the field. Keep it up!</p>`
+            'visit-adherence': {
+                title: 'Visit Adherence',
+                cardTitle: 'Your Visit Metrics',
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2l4-4"></path></svg>',
+                content: '<p>Your daily visit adherence is <strong>94.44%</strong>. You have completed 18 out of 19 planned visits. There is 1 pending visit.</p><p><strong>Actionable Insight:</strong> Ensure you complete your remaining visit to maintain 100% adherence and maximize your day\'s potential.</p>'
             }
         };
+
+        // --- Functions ---
+        function showAlert(message) {
+            if (customAlertMessage) customAlertMessage.textContent = message;
+            if (customAlertOverlay) customAlertOverlay.classList.add('visible');
+        }
+
+        function showScreen(screenId) {
+            const screenToShow = document.getElementById(screenId);
+            if (!screenToShow) {
+                console.error(`Screen with ID "${screenId}" not found.`);
+                return;
+            }
+            allScreens.forEach(s => s.classList.remove('active'));
+            allScreens.forEach(s => s.classList.add('inactive'));
+            screenToShow.classList.remove('inactive');
+            screenToShow.classList.add('active');
+        }
 
         function renderRecentNotifications() {
             if (!recentNotificationsContainer) return;
             recentNotificationsContainer.innerHTML = '';
-
-            recentInsightsData.slice(0, 4).forEach(notif => {
-                const notificationDiv = document.createElement('div');
-                notificationDiv.classList.add('home-notification-card');
-                notificationDiv.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="home-notification-icon">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                    </svg>
-                    <div class="home-notification-content">
-                        <p class="home-notification-title">${notif.title}</p>
-                        <p class="home-notification-text">${notif.text}</p>
-                    </div>
-                    <span class="home-notification-time">${notif.time}</span>
-                `;
-                notificationDiv.addEventListener('click', () => {
-                    showScreen(notif.targetScreen);
-                });
-                recentNotificationsContainer.appendChild(notificationDiv);
-            });
-        }
-        function renderAllNotifications() {
-            const notificationList = document.getElementById('notification-list');
-            if (!notificationList) return;
-            notificationList.innerHTML = '';
-
             recentInsightsData.forEach(notif => {
-                const notificationDiv = document.createElement('div');
-                notificationDiv.classList.add('notification-item');
-                notificationDiv.innerHTML = `
-                    <p>${notif.title}</p>
-                    <p>${notif.text}</p>
-                `;
-                notificationDiv.addEventListener('click', () => {
-                    notificationSidebar.classList.remove('is-open');
-                    showScreen(notif.targetScreen);
-                });
-                notificationList.appendChild(notificationDiv);
-            });
-        }
-
-        // === Collapsible Section Functions ===
-        function toggleSection(headerElement, contentElement, arrowElement) {
-            contentElement.classList.toggle('hidden');
-            arrowElement.classList.toggle('rotate-180');
-        }
-
-        // --- NEW LOGIC FOR QUERIES TO KNOW ---
-        // Function to populate and show the query popup
-        function showQueryPopup(queryId) {
-            const data = queriesData[queryId];
-            if (!data) return;
-
-            queryPopupTitle.textContent = data.title;
-            queryPopupIconContainer.innerHTML = data.iconSvg;
-            queryPopupCardTitle.textContent = data.cardTitle;
-            queryPopupContent.innerHTML = data.content;
-
-            showScreen(queryPopupScreen);
-        }
-
-        // === Event Listeners ===
-        if (loginBtn) {
-            loginBtn.addEventListener('click', () => {
-                const employeeId = employeeIdInput.value.trim();
-                const password = passwordInput.value.trim();
-
-                if (employeeId === "IFBAPPL00499" && password === "Cloud#123") {
-                    alert("Login successful!");
-                    showScreen(homeScreen);
-                    renderRecentNotifications();
-                } else {
-                    alert("Invalid Employee ID or Password. Please try again.");
-                }
+                const card = document.createElement('div');
+                card.className = 'home-notification-card';
+                card.innerHTML = `<svg class="notification-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><div class="home-notification-content"><p class="home-notification-title">${notif.title}</p><p class="home-notification-text">${notif.text}</p></div>`;
+                card.addEventListener('click', () => showScreen(notif.targetScreenId));
+                recentNotificationsContainer.appendChild(card);
             });
         }
         
-        // Universal back button logic for all report screens
+        function renderAllNotifications() {
+            if (!notificationListContainer) return;
+            notificationListContainer.innerHTML = '';
+            allNotificationsData.forEach(notif => {
+                const card = document.createElement('div');
+                card.className = 'notification-card';
+                card.innerHTML = `
+                    <svg class="notification-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <div class="notification-content">
+                        <p class="notification-title">${notif.title}</p>
+                        <p class="notification-text">${notif.text}</p>
+                    </div>
+                `;
+                notificationListContainer.appendChild(card);
+            });
+        }
+
+        function populateQueryPopup(queryType) {
+            const data = queryData[queryType];
+            if (!data) return;
+
+            document.getElementById('query-popup-title').textContent = data.title;
+            document.getElementById('query-popup-card-title').textContent = data.cardTitle;
+            document.getElementById('query-popup-icon-container').innerHTML = data.icon;
+            document.getElementById('query-popup-content').innerHTML = data.content;
+
+            showScreen('query-popup-screen');
+        }
+
+        // --- Event Listeners ---
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const employeeId = document.getElementById('employee-id-input').value.trim();
+            const password = document.getElementById('password-input').value.trim();
+            if (employeeId === "" && password === "") {
+                showAlert("Login successful!");
+                showScreen('home-screen');
+                renderRecentNotifications();
+            } else {
+                showAlert("Invalid Employee ID or Password.");
+            }
+        });
+
+        document.getElementById('custom-alert-close-btn').addEventListener('click', () => {
+            if (customAlertOverlay) customAlertOverlay.classList.remove('visible');
+        });
+
         document.querySelectorAll('.report-back-btn').forEach(button => {
             button.addEventListener('click', () => {
-                const currentReportScreen = button.closest('.report-screen');
-                currentReportScreen.classList.remove('is-active');
-                setTimeout(() => {
-                    showScreen(homeScreen);
-                }, 400); 
+                const targetScreenId = button.dataset.targetScreen || 'home-screen';
+                showScreen(targetScreenId);
             });
         });
 
-        // Hamburger Menu & Notifications
-        if (openHamburgerBtn) {
-            openHamburgerBtn.addEventListener('click', () => {
-                hamburgerSidebar.classList.add('is-open');
-                hamburgerMenuList.style.display = 'block';
-                feedbackSectionContainer.style.display = 'none';
+        document.querySelectorAll('.quick-report-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const targetScreenId = item.dataset.targetScreen;
+                if (targetScreenId) showScreen(targetScreenId);
             });
-        }
-        if (closeHamburgerBtn) {
-            closeHamburgerBtn.addEventListener('click', () => {
-                hamburgerSidebar.classList.remove('is-open');
-            });
-        }
-        if (notificationsMenuBtn) {
-            notificationsMenuBtn.addEventListener('click', () => {
-                hamburgerSidebar.classList.remove('is-open');
-                notificationSidebar.classList.add('is-open');
-                renderAllNotifications();
-            });
-        }
-        if (helpMenuBtn) {
-            helpMenuBtn.addEventListener('click', () => {
-                hamburgerMenuList.style.display = 'none';
-                feedbackSectionContainer.style.display = 'flex';
-            });
-        }
-        if (closeNotificationsBtn) {
-            closeNotificationsBtn.addEventListener('click', () => {
-                notificationSidebar.classList.remove('is-open');
-            });
-        }
-        if (notificationCardSeeAll) {
-            notificationCardSeeAll.addEventListener('click', (event) => {
-                event.stopPropagation();
-                notificationSidebar.classList.add('is-open');
-                renderAllNotifications();
-            });
-        }
-        if (submitFeedbackBtn) {
-            submitFeedbackBtn.addEventListener('click', () => {
-                const feedbackText = document.getElementById('feedback-textarea').value.trim();
-                if (feedbackText) {
-                    alert('Thank you for your feedback! It has been submitted.');
-                    document.getElementById('feedback-textarea').value = '';
-                    feedbackSectionContainer.style.display = 'none';
-                    hamburgerMenuList.style.display = 'block';
-                } else {
-                    alert('Please enter your feedback before submitting.');
-                }
-            });
-        }
+        });
 
-        // Collapsible sections
-        if (recentInsightsHeader) {
-            const arrow = recentInsightsHeader.querySelector('.collapsible-arrow');
-            recentInsightsHeader.addEventListener('click', (event) => {
-                if (event.target.tagName === 'BUTTON') {
-                    return;
-                }
-                toggleSection(recentInsightsHeader, recentNotificationsContainer, arrow);
-            });
-        }
-        if (queriesToKnowHeader) {
-            const arrow = queriesToKnowHeader.querySelector('.collapsible-arrow');
-            queriesToKnowHeader.addEventListener('click', (event) => {
-                if (event.target.tagName === 'BUTTON') {
-                    return;
-                }
-                toggleSection(queriesToKnowHeader, queriesToKnowContainer, arrow);
-            });
-        }
-
-        // --- Event listeners for the new dynamic query cards ---
-        queryCards.forEach(card => {
+        document.querySelectorAll('.query-card').forEach(card => {
             card.addEventListener('click', () => {
-                showQueryPopup(card.id);
+                const queryType = card.dataset.queryType;
+                if (queryType) {
+                    populateQueryPopup(queryType);
+                }
             });
+        });
+
+        document.getElementById('open-hamburger-btn').addEventListener('click', () => {
+            if (hamburgerSidebar) hamburgerSidebar.classList.add('is-open');
+        });
+
+        document.getElementById('close-hamburger-btn').addEventListener('click', () => {
+            if (hamburgerSidebar) hamburgerSidebar.classList.remove('is-open');
+        });
+
+        document.getElementById('notifications-menu-btn').addEventListener('click', () => {
+            if (hamburgerSidebar) hamburgerSidebar.classList.remove('is-open');
+            if (notificationSidebar) notificationSidebar.classList.add('is-open');
+            renderAllNotifications(); // Render notifications when the sidebar is opened
+        });
+
+        document.getElementById('close-notifications-btn').addEventListener('click', () => {
+            if (notificationSidebar) notificationSidebar.classList.remove('is-open');
+        });
+
+        document.getElementById('help-menu-btn').addEventListener('click', () => {
+            hamburgerMenuList.style.display = 'none';
+            feedbackSectionContainer.style.display = 'flex';
+        });
+
+        document.getElementById('back-to-menu-btn').addEventListener('click', () => {
+            feedbackSectionContainer.style.display = 'none';
+            hamburgerMenuList.style.display = 'block';
+        });
+
+        document.getElementById('submit-feedback-btn').addEventListener('click', () => {
+            const feedbackText = document.getElementById('feedback-textarea').value.trim();
+            if (feedbackText.length > 0) {
+                showAlert("Thank you for your feedback!");
+                document.getElementById('feedback-textarea').value = '';
+                feedbackSectionContainer.style.display = 'none';
+                hamburgerMenuList.style.display = 'block';
+            } else {
+                showAlert("Please enter your feedback before submitting.");
+            }
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            showScreen(welcomeScreen);
+            showScreen('welcome-screen');
             renderRecentNotifications();
-
-            // Set initial state for collapsible sections
-            if (recentInsightsHeader && recentNotificationsContainer) {
-                const arrow = recentInsightsHeader.querySelector('.collapsible-arrow');
-                if (!recentNotificationsContainer.classList.contains('hidden')) {
-                    arrow.classList.remove('rotate-180');
-                } else {
-                    arrow.classList.add('rotate-180');
-                }
-            }
-            if (queriesToKnowHeader && queriesToKnowContainer) {
-                const arrow = queriesToKnowHeader.querySelector('.collapsible-arrow');
-                if (!queriesToKnowContainer.classList.contains('hidden')) {
-                    arrow.classList.remove('rotate-180');
-                } else {
-                    arrow.classList.add('rotate-180');
-                }
-            }
         });
     </script>
 </body>
